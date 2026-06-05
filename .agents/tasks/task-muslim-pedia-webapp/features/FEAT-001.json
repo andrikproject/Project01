@@ -1,0 +1,41 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Build the complete Muslim Pedia mobile web application - a Quran reader app styled like quran.al-midror.web.id with all pages, navigation, API integration, and features",
+  "status": "in_progress",
+  "steps": [
+    "Create index.html with: mobile viewport meta tags, Font Awesome CDN for icons, Google Fonts (Amiri for Arabic text, Inter/Poppins for UI), CSS and JS file references, and the following page sections as divs that get shown/hidden via JS routing: splash-screen, home-page, surah-detail-page, search-page, bookmark-page, settings-page. Include a fixed bottom navigation bar with 4 tabs: Home (fa-home), Search (fa-search), Bookmark (fa-bookmark), Settings (fa-cog).",
+    "Create css/style.css with mobile-first responsive design: CSS variables for Islamic green/teal color theme (--primary: #1B7D4E or similar green, --primary-dark, --bg, --card-bg, --text), base reset/normalize styles, Arabic font styling (font-family Amiri, right-to-left, larger font size ~28px), bottom navigation bar fixed at bottom (height ~60px, flex row, icons centered), page container with padding-bottom for nav clearance, card-based surah list items (flexbox with surah number badge, Arabic name, Latin name, translation info, ayah count), header with app title and decorative Islamic geometric pattern or gradient, surah detail page with ayah cards showing Arabic text prominently with Indonesian translation below, active nav state styling, smooth transitions/animations, loading spinner, and a color scheme that matches the reference site's green Islamic aesthetic.",
+    "Create js/api.js as a module/service: async function getAllSurahs() that fetches from https://equran.id/api/v2/surat and returns the data array; async function getSurahDetail(nomor) that fetches from https://equran.id/api/v2/surat/{nomor} and returns the full surah object with ayahs; include error handling with try/catch and return null on failure; cache surah list in memory after first fetch to avoid redundant API calls.",
+    "Create js/storage.js for localStorage operations: functions to get/set bookmarks (array of objects with surahNomor, surahName, ayahNumber, ayahText), functions to get/set lastRead (object with surahNomor, ayahNumber, surahName), functions to get/set settings (fontSize, theme/darkMode, selectedReciter), initialize defaults if no data exists.",
+    "Create js/app.js as the main application controller with: hash-based router that listens to hashchange and shows/hides page sections (#home, #surah/N, #search, #bookmark, #settings); home page renderer that calls API to get all surahs and renders them as a scrollable card list (each card shows: numbered circle badge, Arabic surah name, Latin name, meaning in parentheses, 'N ayat - Mekah/Madinah' info); surah detail page that loads a specific surah's ayahs and renders each ayah as a card with Arabic text (large, RTL), Indonesian translation below, ayah number badge, play audio button, and bookmark button; search page with input field that filters surahs by name/meaning and also allows searching within ayah text; bookmark page that reads from localStorage and displays saved ayahs with ability to navigate to them; settings page with font size slider, dark mode toggle, and reciter selection dropdown (using the 6 reciters from API: Abdullah Al-Juhany, Abdul Muhsin Al-Qasim, Abdurrahman as-Sudais, Ibrahim Al-Dossari, Misyari Rasyid Al-Afasi, Yasser Al-Dosari); audio player functionality that plays per-ayah audio using HTML5 Audio API; last-read tracking that saves position when user opens a surah; bottom nav click handlers that update active state and navigate.",
+    "Create a header/hero section on the home page with: app name 'Muslim Pedia' prominently displayed, a decorative Islamic-style gradient or pattern background (using CSS gradients in green/gold tones), and a 'Last Read' card that shows the last surah and ayah the user was reading with a 'Continue' button.",
+    "Add PWA support: create manifest.json with app name 'Muslim Pedia', theme_color green, icons array; add a simple service worker (sw.js) for offline caching of static assets and API responses; add manifest link and service worker registration in index.html.",
+    "Add loading states: skeleton/shimmer loading animation while API data is being fetched on home page and surah detail page; error state UI if API fails with a retry button; smooth scroll-to-top when navigating between pages.",
+    "Create assets/icons directory with SVG or use Font Awesome for all icons. Ensure the app icon is referenced in manifest.json. Add a simple favicon."
+  ],
+  "acceptance_criteria": [
+    "index.html opens in a browser and displays the Muslim Pedia home page with a list of all 114 surahs fetched from equran.id API",
+    "Bottom navigation has 4 tabs (Home, Search, Bookmark, Settings) with Font Awesome icons and active state highlighting",
+    "Clicking a surah card navigates to the surah detail page showing all ayahs with Arabic text and Indonesian translation",
+    "Each ayah has a play button that plays the audio from equran.id CDN",
+    "Each ayah has a bookmark button that saves/removes it from localStorage",
+    "Search page allows filtering surahs by name and searching ayah text",
+    "Bookmark page shows all saved ayahs and allows navigation to them",
+    "Settings page has working font size adjustment, dark mode toggle, and reciter selection",
+    "Last Read card on home page shows the most recently viewed surah/ayah",
+    "The design is mobile-first with green/teal Islamic color scheme matching the reference site style",
+    "App works as a PWA with manifest.json and basic service worker",
+    "Loading states display while data is being fetched"
+  ],
+  "verification": [
+    "Check that all files exist: index.html, css/style.css, js/app.js, js/api.js, js/storage.js, manifest.json, sw.js",
+    "Validate index.html is well-formed HTML5 with proper meta tags, CDN links, and script references",
+    "Verify the API integration works by running: node -e \"fetch('https://equran.id/api/v2/surat').then(r=>r.json()).then(d=>console.log('Surahs:', d.data.length))\"",
+    "Check that CSS contains mobile-first media queries and Islamic green color variables",
+    "Verify JavaScript files contain proper routing, API calls, localStorage operations, and audio playback logic",
+    "Serve the site with a local HTTP server and verify in browser: npx http-server /projects/sandbox/Project01 -p 8080"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

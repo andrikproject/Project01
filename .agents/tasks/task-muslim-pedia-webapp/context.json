@@ -1,0 +1,35 @@
+{
+  "project_type": "Static mobile-first web application (HTML/CSS/JS)",
+  "language": "HTML, CSS, JavaScript (vanilla, no frameworks)",
+  "build_system": "None - static files served directly",
+  "test_framework": "None - manual browser testing, validate HTML structure",
+  "build_command": "N/A - static site, validate with opening index.html",
+  "test_command": "N/A - verify files exist and HTML is well-formed",
+  "verification_instructions": "Open index.html in a browser, verify all pages render correctly, API calls succeed, navigation works",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - pure static HTML/CSS/JS site",
+  "environment_constraints": "OPEN_INTERNET - full network access available. equran.id API is accessible.",
+  "contribution_requirements": "None specified - new greenfield project",
+  "key_patterns": "Mobile-first SPA-like design using vanilla JS with hash-based routing. Uses equran.id API (https://equran.id/api/v2/surat) for Quran data. LocalStorage for bookmarks and last-read state.",
+  "relevant_files": [
+    "index.html - main HTML file with all page structures",
+    "css/style.css - all styling including responsive mobile-first design",
+    "js/app.js - main application logic, routing, API calls",
+    "js/api.js - API service layer for equran.id",
+    "js/storage.js - LocalStorage utilities for bookmarks and settings",
+    "manifest.json - PWA manifest for app-like experience",
+    "assets/ - icons and images"
+  ],
+  "directory_structure": "Single-page application structure: index.html at root, css/ for styles, js/ for scripts, assets/ for icons/images",
+  "api_details": {
+    "base_url": "https://equran.id/api/v2",
+    "endpoints": {
+      "list_surahs": "GET /surat - returns all 114 surahs with metadata",
+      "get_surah": "GET /surat/{nomor} - returns surah with all ayahs, Arabic text, Latin transliteration, Indonesian translation, and audio URLs"
+    },
+    "response_fields": {
+      "surah": "nomor, nama (Arabic), namaLatin, jumlahAyat, tempatTurun (Mekah/Madinah), arti (meaning), deskripsi, audioFull",
+      "ayah": "nomorAyat, teksArab, teksLatin, teksIndonesia, audio (object with multiple reciters)"
+    }
+  }
+}

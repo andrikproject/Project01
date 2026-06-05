@@ -1,0 +1,7 @@
+{
+  "task_id": "task-muslim-pedia-webapp",
+  "task_description": "Build a complete mobile-first Quran web application called 'Muslim Pedia' using plain HTML, CSS, and JavaScript, styled after quran.al-midror.web.id. Features include: surah listing, ayah reading with Arabic text and Indonesian translation, audio playback, bookmarks, search, settings (dark mode, font size, reciter selection), last-read tracking, and PWA support. Uses equran.id API for data.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

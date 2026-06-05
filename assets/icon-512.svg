@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="100" fill="#1B7D4E"/>
+  <circle cx="256" cy="210" r="130" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+  <circle cx="256" cy="210" r="95" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+  <text x="256" y="245" font-family="serif" font-size="130" fill="white" text-anchor="middle">&#1602;&#1585;&#1570;&#1606;</text>
+  <text x="256" y="410" font-family="sans-serif" font-size="48" fill="white" text-anchor="middle" font-weight="bold">Muslim Pedia</text>
+</svg>
