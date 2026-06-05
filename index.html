@@ -250,6 +250,95 @@
       </div>
     </section>
 
+    <!-- Arah Kiblat Page -->
+    <section id="kiblat-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Arah Kiblat</h2>
+          <p>Kompas arah Ka'bah</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="kiblat-content" class="kiblat-container"></div>
+      </div>
+    </section>
+
+    <!-- Juz Amma Page -->
+    <section id="juz-amma-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Juz Amma</h2>
+          <p>Juz 30 - Surah 78 sampai 114</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="juz-amma-list" class="surah-list"></div>
+      </div>
+    </section>
+
+    <!-- Surah Favorit Page -->
+    <section id="favorit-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Surah Favorit</h2>
+          <p>Surah-surah populer</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="favorit-list" class="surah-list"></div>
+      </div>
+    </section>
+
+    <!-- Kalkulator Zakat Page -->
+    <section id="zakat-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Kalkulator Zakat</h2>
+          <p>Hitung zakat mal</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="zakat-info">
+          <div class="zakat-info-card">
+            <i class="fas fa-info-circle"></i>
+            <p>Zakat Mal wajib dikeluarkan jika harta mencapai nisab (setara 85 gram emas) dan telah dimiliki selama 1 tahun (haul). Besarnya 2,5% dari total harta.</p>
+          </div>
+        </div>
+        <div class="zakat-form">
+          <div class="zakat-input-group">
+            <label for="zakat-amount">Total Harta (Rupiah)</label>
+            <div class="zakat-input-wrapper">
+              <span class="zakat-currency">Rp</span>
+              <input type="number" id="zakat-amount" class="zakat-input" placeholder="Masukkan jumlah harta">
+            </div>
+            <p class="zakat-nisab-info">Nisab: 85 gram emas (sekitar Rp 85.000.000)</p>
+          </div>
+          <button class="zakat-calculate-btn" id="zakat-calculate-btn">
+            <i class="fas fa-calculator"></i> Hitung Zakat
+          </button>
+        </div>
+        <div id="zakat-result" class="zakat-result"></div>
+      </div>
+    </section>
+
+    <!-- Hadits Page -->
+    <section id="hadits-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Hadits</h2>
+          <p>Kumpulan hadits populer</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="hadits-list" class="hadits-list"></div>
+      </div>
+    </section>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="nav-item active" data-page="home">

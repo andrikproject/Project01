@@ -246,3 +246,181 @@ const DataAsmaulHusna = [
   { number: 98, arabic: "الرَّشِيْدُ", latin: "Ar-Rasyid", meaning: "Yang Maha Pandai" },
   { number: 99, arabic: "الصَّبُوْرُ", latin: "Ash-Shabur", meaning: "Yang Maha Sabar" }
 ];
+
+const DataHadits = [
+  {
+    id: 1,
+    title: "Niat dalam Beramal",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+    translation: "Sesungguhnya setiap amalan tergantung pada niatnya. Dan sesungguhnya setiap orang akan mendapatkan apa yang ia niatkan."
+  },
+  {
+    id: 2,
+    title: "Rukun Islam",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ وَإِقَامِ الصَّلَاةِ وَإِيتَاءِ الزَّكَاةِ وَحَجِّ الْبَيْتِ وَصَوْمِ رَمَضَانَ",
+    translation: "Islam dibangun di atas lima perkara: bersaksi bahwa tidak ada tuhan selain Allah dan Muhammad adalah utusan Allah, mendirikan sholat, menunaikan zakat, haji ke Baitullah, dan puasa Ramadhan."
+  },
+  {
+    id: 3,
+    title: "Iman, Islam, dan Ihsan",
+    narrator: "HR. Muslim",
+    arabic: "الْإِحْسَانُ أَنْ تَعْبُدَ اللَّهَ كَأَنَّكَ تَرَاهُ فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ",
+    translation: "Ihsan adalah engkau beribadah kepada Allah seakan-akan engkau melihat-Nya, jika engkau tidak melihat-Nya maka sesungguhnya Dia melihatmu."
+  },
+  {
+    id: 4,
+    title: "Halal dan Haram",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "إِنَّ الْحَلَالَ بَيِّنٌ وَإِنَّ الْحَرَامَ بَيِّنٌ وَبَيْنَهُمَا أُمُورٌ مُشْتَبِهَاتٌ",
+    translation: "Sesungguhnya yang halal itu jelas dan yang haram itu jelas, dan di antara keduanya ada perkara-perkara yang samar (syubhat)."
+  },
+  {
+    id: 5,
+    title: "Larangan Marah",
+    narrator: "HR. Bukhari",
+    arabic: "لَا تَغْضَبْ فَرَدَّدَ مِرَارًا قَالَ لَا تَغْضَبْ",
+    translation: "Janganlah engkau marah. Beliau mengulang-ulang sabdanya: Janganlah engkau marah."
+  },
+  {
+    id: 6,
+    title: "Senyum adalah Sedekah",
+    narrator: "HR. Tirmidzi",
+    arabic: "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+    translation: "Senyummu di hadapan saudaramu adalah sedekah bagimu."
+  },
+  {
+    id: 7,
+    title: "Hak Sesama Muslim",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+    translation: "Tidak beriman salah seorang di antara kalian sampai ia mencintai untuk saudaranya apa yang ia cintai untuk dirinya sendiri."
+  },
+  {
+    id: 8,
+    title: "Kebersihan Sebagian dari Iman",
+    narrator: "HR. Muslim",
+    arabic: "الطُّهُورُ شَطْرُ الْإِيمَانِ",
+    translation: "Kebersihan (bersuci) adalah sebagian dari iman."
+  },
+  {
+    id: 9,
+    title: "Berbakti kepada Orang Tua",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "رِضَا الرَّبِّ فِي رِضَا الْوَالِدِ وَسَخَطُ الرَّبِّ فِي سَخَطِ الْوَالِدِ",
+    translation: "Ridha Allah tergantung pada ridha orang tua dan murka Allah tergantung pada murka orang tua."
+  },
+  {
+    id: 10,
+    title: "Silaturahmi",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "مَنْ أَحَبَّ أَنْ يُبْسَطَ لَهُ فِي رِزْقِهِ وَيُنْسَأَ لَهُ فِي أَثَرِهِ فَلْيَصِلْ رَحِمَهُ",
+    translation: "Barangsiapa yang ingin dilapangkan rezekinya dan dipanjangkan umurnya, maka hendaklah ia menyambung silaturahmi."
+  },
+  {
+    id: 11,
+    title: "Kejujuran",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "عَلَيْكُمْ بِالصِّدْقِ فَإِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ وَإِنَّ الْبِرَّ يَهْدِي إِلَى الْجَنَّةِ",
+    translation: "Hendaklah kalian berlaku jujur, karena kejujuran membawa kepada kebaikan dan kebaikan membawa ke surga."
+  },
+  {
+    id: 12,
+    title: "Kesabaran",
+    narrator: "HR. Muslim",
+    arabic: "وَمَا أُعْطِيَ أَحَدٌ عَطَاءً خَيْرًا وَأَوْسَعَ مِنَ الصَّبْرِ",
+    translation: "Tidak ada suatu pemberian yang lebih baik dan lebih luas yang diberikan kepada seseorang selain kesabaran."
+  },
+  {
+    id: 13,
+    title: "Taubat",
+    narrator: "HR. Muslim",
+    arabic: "كُلُّ ابْنِ آدَمَ خَطَّاءٌ وَخَيْرُ الْخَطَّائِينَ التَّوَّابُونَ",
+    translation: "Setiap anak Adam pasti berbuat kesalahan, dan sebaik-baik orang yang berbuat kesalahan adalah yang bertaubat."
+  },
+  {
+    id: 14,
+    title: "Keutamaan Doa",
+    narrator: "HR. Tirmidzi",
+    arabic: "الدُّعَاءُ هُوَ الْعِبَادَةُ",
+    translation: "Doa adalah ibadah."
+  },
+  {
+    id: 15,
+    title: "Menuntut Ilmu",
+    narrator: "HR. Ibnu Majah",
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+    translation: "Menuntut ilmu adalah kewajiban bagi setiap muslim."
+  },
+  {
+    id: 16,
+    title: "Adab Makan",
+    narrator: "HR. Muslim",
+    arabic: "كُلْ بِيَمِينِكَ وَكُلْ مِمَّا يَلِيكَ",
+    translation: "Makanlah dengan tangan kananmu dan makanlah dari makanan yang terdekat denganmu."
+  },
+  {
+    id: 17,
+    title: "Menjaga Lisan",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+    translation: "Barangsiapa beriman kepada Allah dan hari akhir, hendaklah ia berkata baik atau diam."
+  },
+  {
+    id: 18,
+    title: "Malu",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "الْحَيَاءُ لَا يَأْتِي إِلَّا بِخَيْرٍ",
+    translation: "Malu itu tidak mendatangkan sesuatu kecuali kebaikan."
+  },
+  {
+    id: 19,
+    title: "Kasih Sayang",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ ارْحَمُوا مَنْ فِي الْأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
+    translation: "Orang-orang yang penyayang akan disayangi oleh Ar-Rahman. Sayangilah yang di bumi, niscaya yang di langit akan menyayangimu."
+  },
+  {
+    id: 20,
+    title: "Keutamaan Dzikir",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ ثَقِيلَتَانِ فِي الْمِيزَانِ حَبِيبَتَانِ إِلَى الرَّحْمَنِ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    translation: "Dua kalimat yang ringan di lisan, berat di timbangan, dan dicintai oleh Ar-Rahman: Subhanallahi wa bihamdihi, Subhanallahil 'Azhim."
+  },
+  {
+    id: 21,
+    title: "Keutamaan Sholat",
+    narrator: "HR. Muslim",
+    arabic: "الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ كَفَّارَةٌ لِمَا بَيْنَهُنَّ مَا لَمْ تُغْشَ الْكَبَائِرُ",
+    translation: "Sholat lima waktu dan Jumat ke Jumat berikutnya adalah penghapus dosa di antara keduanya, selama dosa-dosa besar dijauhi."
+  },
+  {
+    id: 22,
+    title: "Keutamaan Puasa",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+    translation: "Barangsiapa berpuasa Ramadhan karena iman dan mengharap pahala, maka diampuni dosa-dosanya yang telah lalu."
+  },
+  {
+    id: 23,
+    title: "Keutamaan Sedekah",
+    narrator: "HR. Bukhari & Muslim",
+    arabic: "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ",
+    translation: "Sedekah itu tidak mengurangi harta."
+  },
+  {
+    id: 24,
+    title: "Menutup Aib Saudara",
+    narrator: "HR. Muslim",
+    arabic: "مَنْ سَتَرَ مُسْلِمًا سَتَرَهُ اللَّهُ فِي الدُّنْيَا وَالْآخِرَةِ",
+    translation: "Barangsiapa menutupi aib seorang muslim, maka Allah akan menutupi aibnya di dunia dan akhirat."
+  },
+  {
+    id: 25,
+    title: "Larangan Menyakiti Sesama",
+    narrator: "HR. Ahmad & Ibnu Majah",
+    arabic: "لَا ضَرَرَ وَلَا ضِرَارَ",
+    translation: "Tidak boleh membahayakan diri sendiri dan tidak boleh membahayakan orang lain."
+  }
+];

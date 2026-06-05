@@ -1388,3 +1388,347 @@ body {
 .hijriyah-gregorian i {
   color: var(--primary);
 }
+
+/* ===== Arah Kiblat ===== */
+.kiblat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.kiblat-status {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.kiblat-status i {
+  margin-right: 8px;
+  color: var(--primary);
+}
+
+.kiblat-compass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.kiblat-compass-ring {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.kiblat-arrow {
+  font-size: 48px;
+  color: var(--primary);
+  transition: transform 0.3s ease;
+}
+
+.kiblat-kaaba-icon {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+}
+
+.kiblat-degree {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.kiblat-info {
+  text-align: center;
+  padding: 0 16px;
+}
+
+.kiblat-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: var(--shadow);
+}
+
+.kiblat-hint i {
+  margin-right: 6px;
+  color: var(--primary);
+}
+
+/* ===== Kalkulator Zakat ===== */
+.zakat-info {
+  margin-bottom: 16px;
+}
+
+.zakat-info-card {
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.zakat-info-card i {
+  color: var(--primary);
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.zakat-info-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.zakat-form {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+.zakat-input-group {
+  margin-bottom: 16px;
+}
+
+.zakat-input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.zakat-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.zakat-input-wrapper:focus-within {
+  border-color: var(--primary);
+}
+
+.zakat-currency {
+  padding: 12px 14px;
+  background: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-right: 1px solid var(--border);
+}
+
+.zakat-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--card-bg);
+  width: 100%;
+}
+
+.zakat-input::placeholder {
+  color: var(--text-light);
+}
+
+.zakat-nisab-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.zakat-calculate-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background var(--transition);
+}
+
+.zakat-calculate-btn:active {
+  background: var(--primary-dark);
+}
+
+.zakat-result-card {
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.zakat-result-card.zakat-success {
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+}
+
+.zakat-result-card.zakat-warning {
+  background: var(--card-bg);
+  border: 1px solid #F59E0B;
+  box-shadow: var(--shadow);
+}
+
+.zakat-result-card.zakat-error {
+  background: var(--card-bg);
+  border: 1px solid #EF4444;
+  box-shadow: var(--shadow);
+}
+
+.zakat-result-card i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.zakat-success i {
+  color: var(--primary);
+}
+
+.zakat-warning i {
+  color: #F59E0B;
+}
+
+.zakat-error i {
+  color: #EF4444;
+}
+
+.zakat-result-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.zakat-result-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.zakat-result-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.zakat-result-card p {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* ===== Hadits ===== */
+.hadits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hadits-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow var(--transition);
+}
+
+.hadits-card:active {
+  box-shadow: var(--shadow-lg);
+}
+
+.hadits-card-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hadits-card-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.hadits-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.hadits-card-narrator {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.hadits-chevron {
+  font-size: 12px;
+  color: var(--text-light);
+  transition: transform var(--transition);
+  margin-left: 12px;
+}
+
+.hadits-card.expanded .hadits-chevron {
+  transform: rotate(180deg);
+}
+
+.hadits-card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 16px;
+}
+
+.hadits-card.expanded .hadits-card-body {
+  max-height: 600px;
+  padding: 0 16px 16px;
+}
+
+.hadits-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 22px;
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
+  color: var(--text);
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+
+.hadits-translation {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}

@@ -41,7 +41,12 @@ const App = (() => {
     sholat: document.getElementById('sholat-page'),
     tasbih: document.getElementById('tasbih-page'),
     asmaulHusna: document.getElementById('asmaul-husna-page'),
-    hijriyah: document.getElementById('hijriyah-page')
+    hijriyah: document.getElementById('hijriyah-page'),
+    kiblat: document.getElementById('kiblat-page'),
+    juzAmma: document.getElementById('juz-amma-page'),
+    favorit: document.getElementById('favorit-page'),
+    zakat: document.getElementById('zakat-page'),
+    hadits: document.getElementById('hadits-page')
   };
 
   const navItems = document.querySelectorAll('.nav-item');
@@ -106,6 +111,26 @@ const App = (() => {
         showPage('hijriyah');
         loadHijriyah();
         break;
+      case '#kiblat':
+        showPage('kiblat');
+        loadKiblat();
+        break;
+      case '#juz-amma':
+        showPage('juzAmma');
+        loadJuzAmma();
+        break;
+      case '#favorit':
+        showPage('favorit');
+        loadFavorit();
+        break;
+      case '#zakat':
+        showPage('zakat');
+        loadZakat();
+        break;
+      case '#hadits':
+        showPage('hadits');
+        loadHadits();
+        break;
       default:
         showPage('home');
         loadHome();
@@ -139,11 +164,16 @@ const App = (() => {
       bookmark: 'bookmark',
       settings: null,
       more: 'more',
-      doa: null,
-      sholat: null,
-      tasbih: null,
-      asmaulHusna: null,
-      hijriyah: null
+      doa: 'more',
+      sholat: 'more',
+      tasbih: 'more',
+      asmaulHusna: 'more',
+      hijriyah: 'more',
+      kiblat: 'more',
+      juzAmma: 'more',
+      favorit: 'more',
+      zakat: 'more',
+      hadits: 'more'
     };
 
     navItems.forEach(item => {
@@ -918,6 +948,205 @@ const App = (() => {
     }
   }
 
+  // ===== Arah Kiblat =====
+
+  let kiblatWatchId = null;
+  let kiblatOrientationHandler = null;
+
+  function loadKiblat() {
+    const container = document.getElementById('kiblat-content');
+    container.innerHTML = `
+      <div class="kiblat-status" id="kiblat-status">
+        <i class="fas fa-spinner fa-spin"></i> Mengambil lokasi...
+      </div>
+      <div class="kiblat-compass" id="kiblat-compass" style="display:none;">
+        <div class="kiblat-compass-ring">
+          <div class="kiblat-arrow" id="kiblat-arrow">
+            <i class="fas fa-location-arrow"></i>
+          </div>
+          <div class="kiblat-kaaba-icon">🕋</div>
+        </div>
+        <div class="kiblat-degree" id="kiblat-degree"></div>
+      </div>
+      <div class="kiblat-info" id="kiblat-info"></div>
+    `;
+
+    // Clean up previous listeners
+    if (kiblatWatchId !== null) {
+      navigator.geolocation.clearWatch(kiblatWatchId);
+      kiblatWatchId = null;
+    }
+    if (kiblatOrientationHandler) {
+      window.removeEventListener('deviceorientation', kiblatOrientationHandler);
+      kiblatOrientationHandler = null;
+    }
+
+    if (!navigator.geolocation) {
+      document.getElementById('kiblat-status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Geolokasi tidak didukung oleh browser ini.';
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+        const qiblaBearing = calculateQiblaBearing(userLat, userLon);
+
+        const statusEl = document.getElementById('kiblat-status');
+        const compassEl = document.getElementById('kiblat-compass');
+        const degreeEl = document.getElementById('kiblat-degree');
+        const infoEl = document.getElementById('kiblat-info');
+
+        statusEl.style.display = 'none';
+        compassEl.style.display = 'flex';
+        degreeEl.textContent = Math.round(qiblaBearing) + '\u00B0';
+
+        // Check if Device Orientation is available
+        if (window.DeviceOrientationEvent) {
+          kiblatOrientationHandler = function(event) {
+            if (event.alpha !== null) {
+              const alpha = event.alpha;
+              const rotation = qiblaBearing - alpha;
+              const arrowEl = document.getElementById('kiblat-arrow');
+              if (arrowEl) {
+                arrowEl.style.transform = 'rotate(' + rotation + 'deg)';
+              }
+            }
+          };
+          window.addEventListener('deviceorientation', kiblatOrientationHandler);
+          infoEl.innerHTML = '<p class="kiblat-hint"><i class="fas fa-mobile-alt"></i> Putar perangkat Anda. Panah akan menunjukkan arah Kiblat.</p>';
+        } else {
+          // Desktop - show static arrow
+          const arrowEl = document.getElementById('kiblat-arrow');
+          if (arrowEl) {
+            arrowEl.style.transform = 'rotate(' + qiblaBearing + 'deg)';
+          }
+          infoEl.innerHTML = '<p class="kiblat-hint"><i class="fas fa-desktop"></i> Gunakan perangkat mobile untuk kompas interaktif</p>';
+        }
+      },
+      (error) => {
+        const statusEl = document.getElementById('kiblat-status');
+        statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Gagal mendapatkan lokasi. Pastikan izin lokasi diaktifkan.';
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  function calculateQiblaBearing(userLat, userLon) {
+    const toRad = function(d) { return d * Math.PI / 180; };
+    const toDeg = function(r) { return r * 180 / Math.PI; };
+    const latUser = toRad(userLat);
+    const lonUser = toRad(userLon);
+    const latKaaba = toRad(21.4225);
+    const lonKaaba = toRad(39.8262);
+    const dLon = lonKaaba - lonUser;
+    const x = Math.sin(dLon);
+    const y = Math.cos(latUser) * Math.tan(latKaaba) - Math.sin(latUser) * Math.cos(dLon);
+    let bearing = toDeg(Math.atan2(x, y));
+    if (bearing < 0) bearing += 360;
+    return bearing;
+  }
+
+  // ===== Juz Amma =====
+
+  async function loadJuzAmma() {
+    const container = document.getElementById('juz-amma-list');
+    container.innerHTML = renderSkeletons(10);
+
+    try {
+      const surahs = allSurahsCache || await API.getAllSurahs();
+      allSurahsCache = surahs;
+      const juzAmmaSurahs = surahs.filter(function(s) { return s.nomor >= 78; });
+      renderSurahList(container, juzAmmaSurahs);
+    } catch (error) {
+      container.innerHTML = renderError('Gagal memuat daftar surah Juz Amma', function() { loadJuzAmma(); });
+    }
+  }
+
+  // ===== Surah Favorit =====
+
+  async function loadFavorit() {
+    const container = document.getElementById('favorit-list');
+    container.innerHTML = renderSkeletons(8);
+
+    const favoritNumbers = [1, 18, 19, 20, 36, 55, 56, 67];
+
+    try {
+      const surahs = allSurahsCache || await API.getAllSurahs();
+      allSurahsCache = surahs;
+      const favoritSurahs = favoritNumbers.map(function(num) {
+        return surahs.find(function(s) { return s.nomor === num; });
+      }).filter(Boolean);
+      renderSurahList(container, favoritSurahs);
+    } catch (error) {
+      container.innerHTML = renderError('Gagal memuat surah favorit', function() { loadFavorit(); });
+    }
+  }
+
+  // ===== Kalkulator Zakat =====
+
+  function loadZakat() {
+    const resultEl = document.getElementById('zakat-result');
+    resultEl.innerHTML = '';
+  }
+
+  function calculateZakat() {
+    const amountInput = document.getElementById('zakat-amount');
+    const resultEl = document.getElementById('zakat-result');
+    const amount = parseFloat(amountInput.value);
+
+    if (!amount || amount <= 0) {
+      resultEl.innerHTML = '<div class="zakat-result-card zakat-error"><i class="fas fa-exclamation-circle"></i><p>Masukkan jumlah harta yang valid.</p></div>';
+      return;
+    }
+
+    const nisab = 85000000;
+    const formattedAmount = amount.toLocaleString('id-ID');
+
+    if (amount >= nisab) {
+      const zakat = amount * 0.025;
+      const formattedZakat = zakat.toLocaleString('id-ID');
+      resultEl.innerHTML = '<div class="zakat-result-card zakat-success">' +
+        '<div class="zakat-result-label">Zakat yang harus dikeluarkan:</div>' +
+        '<div class="zakat-result-amount">Rp ' + escapeHtml(formattedZakat) + '</div>' +
+        '<p class="zakat-result-note">2,5% dari Rp ' + escapeHtml(formattedAmount) + '</p>' +
+        '</div>';
+    } else {
+      const remaining = nisab - amount;
+      const formattedRemaining = remaining.toLocaleString('id-ID');
+      resultEl.innerHTML = '<div class="zakat-result-card zakat-warning">' +
+        '<i class="fas fa-info-circle"></i>' +
+        '<p>Harta Anda belum mencapai nisab.</p>' +
+        '<p class="zakat-result-note">Kurang Rp ' + escapeHtml(formattedRemaining) + ' untuk mencapai nisab.</p>' +
+        '</div>';
+    }
+  }
+
+  // ===== Hadits =====
+
+  function loadHadits() {
+    const container = document.getElementById('hadits-list');
+    container.innerHTML = DataHadits.map(function(hadits) {
+      return '<div class="hadits-card" onclick="App.toggleHadits(this)">' +
+        '<div class="hadits-card-header">' +
+          '<div class="hadits-card-title-wrap">' +
+            '<span class="hadits-card-title">' + escapeHtml(hadits.title) + '</span>' +
+            '<span class="hadits-card-narrator">' + escapeHtml(hadits.narrator) + '</span>' +
+          '</div>' +
+          '<i class="fas fa-chevron-down hadits-chevron"></i>' +
+        '</div>' +
+        '<div class="hadits-card-body">' +
+          '<p class="hadits-arabic">' + escapeHtml(hadits.arabic) + '</p>' +
+          '<p class="hadits-translation">' + escapeHtml(hadits.translation) + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function toggleHadits(element) {
+    element.classList.toggle('expanded');
+  }
+
   // ===== Utility =====
 
   function renderSkeletons(count, className = 'skeleton-card') {
@@ -1045,6 +1274,17 @@ const App = (() => {
     document.getElementById('tasbih-reset').addEventListener('click', () => {
       resetTasbih();
     });
+
+    // Zakat calculator
+    document.getElementById('zakat-calculate-btn').addEventListener('click', () => {
+      calculateZakat();
+    });
+
+    document.getElementById('zakat-amount').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        calculateZakat();
+      }
+    });
   }
 
   // ===== Initialize =====
@@ -1063,6 +1303,7 @@ const App = (() => {
     toggleBookmark,
     deleteBookmark,
     toggleDoa,
+    toggleHadits,
     setDzikir,
     setTasbihTarget,
     _retry: executeRetry
