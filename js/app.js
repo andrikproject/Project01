@@ -162,7 +162,7 @@ const App = (() => {
       surahDetail: null,
       search: 'search',
       bookmark: 'bookmark',
-      settings: null,
+      settings: 'more',
       more: 'more',
       doa: 'more',
       sholat: 'more',

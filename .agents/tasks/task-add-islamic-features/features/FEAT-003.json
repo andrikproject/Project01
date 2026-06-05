@@ -2,7 +2,7 @@
   "id": "FEAT-003",
   "type": "chore",
   "description": "Final integration, polish, and service worker update. Ensure all features work together, navigation is consistent, service worker caches new assets, and the app feels cohesive.",
-  "status": "pending",
+  "status": "in_progress",
   "steps": [
     "1. Update sw.js STATIC_ASSETS array to include any new JS files (e.g., js/data.js if created). Add the Aladhan API domain to the fetch handler for network-first caching (similar to how equran.id is handled).",
     "2. Update manifest.json description to reflect the expanded app features.",

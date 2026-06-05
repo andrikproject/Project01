@@ -1,7 +1,7 @@
 {
   "name": "Muslim Pedia",
   "short_name": "Muslim Pedia",
-  "description": "Al-Quran Digital dengan Terjemahan Indonesia",
+  "description": "Muslim Pedia - Al-Quran, Doa, Jadwal Sholat, dan Ibadah Digital",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

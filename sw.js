@@ -1,4 +1,4 @@
-const CACHE_NAME = 'muslim-pedia-v1';
+const CACHE_NAME = 'muslim-pedia-v2';
 const API_CACHE_NAME = 'muslim-pedia-api-v1';
 const MAX_API_CACHE_ENTRIES = 30;
 const STATIC_ASSETS = [
@@ -7,6 +7,7 @@ const STATIC_ASSETS = [
   '/css/style.css',
   '/js/api.js',
   '/js/storage.js',
+  '/js/data.js',
   '/js/app.js',
   '/manifest.json',
   '/assets/favicon.svg',
@@ -42,7 +43,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   // API calls: network first, fallback to cache, with eviction
-  if (url.hostname === 'equran.id') {
+  if (url.hostname === 'equran.id' || url.hostname.includes('aladhan.com')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
