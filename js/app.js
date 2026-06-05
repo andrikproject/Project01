@@ -10,6 +10,21 @@ const App = (() => {
   let currentSurahData = null;
   let searchMode = 'surah';
   let allSurahsCache = null;
+  let searchGeneration = 0;
+  let retryFnMap = {};
+  let retryFnCounter = 0;
+
+  // ===== HTML Escaping Utility =====
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   // DOM Elements
   const pages = {
@@ -65,6 +80,14 @@ const App = (() => {
   }
 
   function showPage(pageName) {
+    // Stop audio when navigating away from surah detail
+    if (pageName !== 'surahDetail' && currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+      currentPlayingAyah = null;
+    }
+
     // Hide all pages
     Object.values(pages).forEach(page => page.classList.remove('active'));
 
@@ -126,8 +149,8 @@ const App = (() => {
       container.innerHTML = `
         <div class="last-read-card" onclick="App.navigate('#surah/${lastRead.surahNomor}')">
           <div class="last-read-label"><i class="fas fa-book-open"></i> Terakhir Dibaca</div>
-          <div class="last-read-surah">${lastRead.surahName}</div>
-          <div class="last-read-ayah">Ayat ${lastRead.nomorAyat}</div>
+          <div class="last-read-surah">${escapeHtml(lastRead.surahName)}</div>
+          <div class="last-read-ayah">Ayat ${escapeHtml(lastRead.nomorAyat)}</div>
         </div>
       `;
     } else {
@@ -140,10 +163,10 @@ const App = (() => {
       <div class="surah-card" onclick="App.navigate('#surah/${surah.nomor}')">
         <div class="surah-number">${surah.nomor}</div>
         <div class="surah-info">
-          <div class="surah-latin">${surah.namaLatin}</div>
-          <div class="surah-meta">${surah.arti} &bull; ${surah.jumlahAyat} Ayat &bull; ${surah.tempatTurun}</div>
+          <div class="surah-latin">${escapeHtml(surah.namaLatin)}</div>
+          <div class="surah-meta">${escapeHtml(surah.arti)} &bull; ${surah.jumlahAyat} Ayat &bull; ${escapeHtml(surah.tempatTurun)}</div>
         </div>
-        <div class="surah-arabic">${surah.nama}</div>
+        <div class="surah-arabic">${escapeHtml(surah.nama)}</div>
       </div>
     `).join('');
   }
@@ -213,13 +236,13 @@ const App = (() => {
               <button class="ayah-action-btn" onclick="App.playAudio(${surah.nomor}, ${ayah.nomorAyat})" id="play-btn-${ayah.nomorAyat}" title="Putar Audio">
                 <i class="fas fa-play"></i>
               </button>
-              <button class="ayah-action-btn ${bookmarked ? 'bookmarked' : ''}" onclick="App.toggleBookmark(${surah.nomor}, '${surah.namaLatin}', ${ayah.nomorAyat})" id="bookmark-btn-${ayah.nomorAyat}" title="Bookmark">
+              <button class="ayah-action-btn ${bookmarked ? 'bookmarked' : ''}" data-surah-nomor="${surah.nomor}" data-surah-name="${escapeHtml(surah.namaLatin)}" data-ayah="${ayah.nomorAyat}" onclick="App.toggleBookmark(this)" id="bookmark-btn-${ayah.nomorAyat}" title="Bookmark">
                 <i class="fas fa-bookmark"></i>
               </button>
             </div>
           </div>
-          <div class="ayah-arabic" style="font-size: ${settings.fontSize}px">${ayah.teksArab}</div>
-          <div class="ayah-translation">${ayah.teksIndonesia}</div>
+          <div class="ayah-arabic" style="font-size: ${settings.fontSize}px">${escapeHtml(ayah.teksArab)}</div>
+          <div class="ayah-translation">${escapeHtml(ayah.teksIndonesia)}</div>
         </div>
       `;
     }).join('');
@@ -231,7 +254,7 @@ const App = (() => {
       html += `
         <button class="surah-nav-btn prev" onclick="App.navigate('#surah/${surah.suratSebelumnya.nomor}')">
           <i class="fas fa-chevron-left"></i>
-          <span>${surah.suratSebelumnya.namaLatin}</span>
+          <span>${escapeHtml(surah.suratSebelumnya.namaLatin)}</span>
         </button>
       `;
     } else {
@@ -241,7 +264,7 @@ const App = (() => {
     if (surah.suratSelanjutnya) {
       html += `
         <button class="surah-nav-btn next" onclick="App.navigate('#surah/${surah.suratSelanjutnya.nomor}')">
-          <span>${surah.suratSelanjutnya.namaLatin}</span>
+          <span>${escapeHtml(surah.suratSelanjutnya.namaLatin)}</span>
           <i class="fas fa-chevron-right"></i>
         </button>
       `;
@@ -337,8 +360,11 @@ const App = (() => {
 
   // ===== Bookmark =====
 
-  function toggleBookmark(surahNomor, surahName, nomorAyat) {
-    const btn = document.getElementById(`bookmark-btn-${nomorAyat}`);
+  function toggleBookmark(btnElement) {
+    const surahNomor = parseInt(btnElement.dataset.surahNomor);
+    const surahName = btnElement.dataset.surahName;
+    const nomorAyat = parseInt(btnElement.dataset.ayah);
+    const btn = btnElement;
     const isCurrentlyBookmarked = Storage.isBookmarked(surahNomor, nomorAyat);
 
     if (isCurrentlyBookmarked) {
@@ -383,10 +409,10 @@ const App = (() => {
     container.innerHTML = bookmarks.map((b, index) => `
       <div class="bookmark-card">
         <div class="bookmark-info" onclick="App.navigate('#surah/${b.surahNomor}')">
-          <div class="bookmark-surah">${b.surahName}</div>
-          <div class="bookmark-ayah-info">Ayat ${b.nomorAyat}</div>
+          <div class="bookmark-surah">${escapeHtml(b.surahName)}</div>
+          <div class="bookmark-ayah-info">Ayat ${escapeHtml(b.nomorAyat)}</div>
         </div>
-        <div class="bookmark-arabic">${b.teksArab ? b.teksArab.substring(0, 30) : ''}</div>
+        <div class="bookmark-arabic">${b.teksArab ? escapeHtml(b.teksArab.substring(0, 30)) : ''}</div>
         <button class="bookmark-delete" onclick="App.deleteBookmark(${b.surahNomor}, ${b.nomorAyat})">
           <i class="fas fa-trash"></i>
         </button>
@@ -469,11 +495,16 @@ const App = (() => {
   }
 
   async function searchAyahs(q, container) {
+    searchGeneration++;
+    const thisGeneration = searchGeneration;
+
     container.innerHTML = '<div class="search-empty"><i class="fas fa-spinner fa-spin"></i><p>Mencari ayat...</p></div>';
 
     try {
       const surahs = allSurahsCache || await API.getAllSurahs();
       allSurahsCache = surahs;
+
+      if (thisGeneration !== searchGeneration) return;
 
       // Search through surahs one by one (limited to show quick results)
       const results = [];
@@ -482,9 +513,12 @@ const App = (() => {
       // Simple approach: search in surah names first, then load specific surahs if needed
       for (const surah of surahs) {
         if (results.length >= maxResults) break;
+        if (thisGeneration !== searchGeneration) return;
 
         try {
           const detail = await API.getSurahDetail(surah.nomor);
+          if (thisGeneration !== searchGeneration) return;
+
           for (const ayah of detail.ayat) {
             if (results.length >= maxResults) break;
             if (ayah.teksIndonesia.toLowerCase().includes(q) ||
@@ -499,13 +533,15 @@ const App = (() => {
             }
           }
           // Show results as they come in
-          if (results.length > 0) {
+          if (results.length > 0 && thisGeneration === searchGeneration) {
             renderAyahSearchResults(container, results);
           }
         } catch {
           // Skip failed surah fetches
         }
       }
+
+      if (thisGeneration !== searchGeneration) return;
 
       if (results.length === 0) {
         container.innerHTML = `
@@ -518,6 +554,7 @@ const App = (() => {
         renderAyahSearchResults(container, results);
       }
     } catch (error) {
+      if (thisGeneration !== searchGeneration) return;
       container.innerHTML = renderError('Gagal mencari', () => performSearch(document.getElementById('search-input').value));
     }
   }
@@ -525,8 +562,8 @@ const App = (() => {
   function renderAyahSearchResults(container, results) {
     container.innerHTML = results.map(r => `
       <div class="search-ayah-result" onclick="App.navigate('#surah/${r.surahNomor}')">
-        <div class="search-ayah-surah">${r.surahName} : ${r.nomorAyat}</div>
-        <div class="search-ayah-text">${r.teksIndonesia.substring(0, 120)}${r.teksIndonesia.length > 120 ? '...' : ''}</div>
+        <div class="search-ayah-surah">${escapeHtml(r.surahName)} : ${r.nomorAyat}</div>
+        <div class="search-ayah-text">${escapeHtml(r.teksIndonesia.substring(0, 120))}${r.teksIndonesia.length > 120 ? '...' : ''}</div>
       </div>
     `).join('');
   }
@@ -576,17 +613,27 @@ const App = (() => {
   }
 
   function renderError(message, retryFn) {
-    // Store retry function globally so onclick can access it
-    window._retryFn = retryFn;
+    // Store retry function in a map with unique ID to avoid collisions
+    retryFnCounter++;
+    const retryId = retryFnCounter;
+    retryFnMap[retryId] = retryFn;
     return `
       <div class="error-state">
         <i class="fas fa-exclamation-triangle"></i>
-        <p>${message}</p>
-        <button class="retry-btn" onclick="window._retryFn()">
+        <p>${escapeHtml(message)}</p>
+        <button class="retry-btn" onclick="App._retry(${retryId})">
           <i class="fas fa-rotate-right"></i> Coba Lagi
         </button>
       </div>
     `;
+  }
+
+  function executeRetry(retryId) {
+    const fn = retryFnMap[retryId];
+    if (fn) {
+      delete retryFnMap[retryId];
+      fn();
+    }
   }
 
   // ===== Event Listeners =====
@@ -682,7 +729,8 @@ const App = (() => {
     navigate,
     playAudio,
     toggleBookmark,
-    deleteBookmark
+    deleteBookmark,
+    _retry: executeRetry
   };
 })();
 
