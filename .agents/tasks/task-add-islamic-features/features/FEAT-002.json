@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Implement the second batch of 5 features: Arah Kiblat (Qibla Direction), Juz Amma quick access, Surah Favorit, Kalkulator Zakat, and Hadits collection. These features extend the app with compass/device orientation, curated surah lists, financial calculator, and hadith content.",
+  "status": "completed",
+  "steps": [
+    "1. Add Arah Kiblat page (<section id='kiblat-page' class='page'>) in index.html: Display a compass that points toward Mecca (Kaaba coordinates: 21.4225, 39.8262). Use Device Orientation API (window.addEventListener('deviceorientation')) to get device heading. Calculate Qibla bearing from user's GPS location using the formula: qiblaAngle = atan2(sin(lonKaaba - lonUser), cos(latUser) * tan(latKaaba) - sin(latUser) * cos(lonKaaba - lonUser)). Show a compass rose SVG/CSS that rotates. If device orientation is not available (desktop), show a static arrow with the calculated angle and a message. Request geolocation for user position. Add route #kiblat to the router.",
+    "2. Add Juz Amma page (<section id='juz-amma-page' class='page'>) in index.html: Show a filtered list of Juz 30 surahs (surah 78-114). Reuse the existing surah card rendering pattern from the home page. On load, filter allSurahsCache (or fetch all surahs) to only surahs 78-114. Each card navigates to #surah/N. Add a header explaining this is Juz 30 / Juz Amma. Add route #juz-amma to the router.",
+    "3. Add Surah Favorit page (<section id='favorit-page' class='page'>) in index.html: Show quick-access cards for popular surahs: Yasin (36), Ar-Rahman (55), Al-Waqi'ah (56), Al-Mulk (67), Al-Kahfi (18), Maryam (19), Taha (20), Al-Fatihah (1). Display with same surah card pattern. Each navigates to #surah/N. Add route #favorit to the router.",
+    "4. Add Kalkulator Zakat page (<section id='zakat-page' class='page'>) in index.html: Simple zakat mal calculator. Input fields: total harta/savings (number input with Rupiah formatting), nisab info displayed (currently ~85 gram emas, show approximate value). Calculate: if savings >= nisab, zakat = 2.5% of total. Show result clearly. Add a note explaining zakat mal rules briefly. Include gold price reference (can be static approximate or fetched). Style with form inputs matching the app's design. Add route #zakat to the router.",
+    "5. Add Hadits page (<section id='hadits-page' class='page'>) in index.html: Embed a collection of at least 20-25 popular hadith. Each hadith has: id, narrator/source (e.g., HR. Bukhari, HR. Muslim), title, arabic text (if available, or just the Indonesian text), translation in Indonesian. Display as expandable cards grouped by topic or just as a scrollable list. Topics: iman/faith, ibadah/worship, akhlak/character, ilmu/knowledge, daily life. Add route #hadits to the router.",
+    "6. Add routes for all 5 new pages to the router in js/app.js: #kiblat, #juz-amma, #favorit, #zakat, #hadits. Add page elements to the pages object. Create load functions for each page.",
+    "7. Add CSS styles for new pages: .kiblat-compass (circular compass UI with rotating arrow), .juz-amma-header, .favorit-grid, .zakat-form + .zakat-input + .zakat-result, .hadits-card (expandable similar to doa cards). Follow existing design variables and patterns.",
+    "8. Ensure the More page grid (from FEAT-001) includes navigation items for all 5 new features with correct icons and hash links."
+  ],
+  "acceptance_criteria": [
+    "Arah Kiblat page shows compass direction to Mecca (works with geolocation permission)",
+    "Juz Amma page shows surahs 78-114 with correct surah cards that navigate to detail",
+    "Surah Favorit page shows curated popular surahs that navigate to detail",
+    "Kalkulator Zakat correctly calculates 2.5% when savings exceed nisab",
+    "Hadits page shows at least 20 hadith with source and Indonesian translation",
+    "All new pages accessible from More menu",
+    "All new pages support dark mode",
+    "Hash routing works correctly for all new pages",
+    "No JavaScript errors in console"
+  ],
+  "verification": [
+    "Open index.html and navigate to each new page via More menu",
+    "Verify Kiblat compass renders (may show static direction on desktop)",
+    "Verify Juz Amma shows exactly surahs 78-114",
+    "Verify Surah Favorit shows the curated list and cards are clickable",
+    "Test Zakat calculator: enter 100000000, verify result shows 2500000",
+    "Verify Hadits page shows hadith collection with source attribution"
+  ],
+  "blocked_reason": null,
+  "findings": "All 5 new features implemented successfully. 25 hadith entries added to DataHadits in data.js. All JS files pass syntax validation (node --check). 16 total page sections in HTML (11 from FEAT-001 + 5 new). New pages mapped to 'more' in navMap for bottom nav highlighting. Zakat calculator uses 85,000,000 IDR as nisab threshold. Kiblat compass uses geolocation + Device Orientation API with desktop fallback. No build step required."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "FEAT-003",
+  "type": "chore",
+  "description": "Final integration, polish, and service worker update. Ensure all features work together, navigation is consistent, service worker caches new assets, and the app feels cohesive.",
+  "status": "completed",
+  "steps": [
+    "1. Update sw.js STATIC_ASSETS array to include any new JS files (e.g., js/data.js if created). Add the Aladhan API domain to the fetch handler for network-first caching (similar to how equran.id is handled).",
+    "2. Update manifest.json description to reflect the expanded app features.",
+    "3. Verify and fix any navigation inconsistencies: Ensure back buttons on sub-pages navigate to #more (not just #home). Ensure the More nav item shows as active when on any sub-page accessed from More.",
+    "4. Add smooth transitions between pages. Ensure all new pages have proper header styling consistent with existing pages (use .simple-header pattern from bookmark/settings pages).",
+    "5. Test dark mode toggle affects all new pages correctly - verify CSS variables are used consistently throughout all new styles.",
+    "6. Add a brief 'about' or version update in the Settings page mentioning the new features (update version to v2.0).",
+    "7. Ensure the home page header subtitle reflects the expanded app: change from 'Al-Quran Digital dengan Terjemahan' to something like 'Al-Quran & Ibadah Digital'."
+  ],
+  "acceptance_criteria": [
+    "Service worker caches all new static assets",
+    "Aladhan API responses are cached with network-first strategy",
+    "Dark mode works consistently across all pages",
+    "Navigation between all pages is smooth and consistent",
+    "Back buttons work correctly from all sub-pages",
+    "Settings page shows v2.0",
+    "No console errors when navigating through all pages"
+  ],
+  "verification": [
+    "Run a local HTTP server and verify service worker registers without errors",
+    "Toggle dark mode and navigate through all pages to verify theming",
+    "Navigate forward and backward through all feature pages",
+    "Check browser console for any JavaScript errors during full navigation flow"
+  ],
+  "blocked_reason": null,
+  "findings": "All changes implemented and validated. Service worker updated with data.js in STATIC_ASSETS and aladhan.com in network-first caching. CACHE_NAME bumped to v2 to force refresh. Manifest description updated. Home subtitle changed to 'Al-Quran & Ibadah Digital'. Settings shows v2.0. Settings page navMap updated from null to 'more' for consistent bottom nav highlighting. All CSS already uses CSS variables correctly - no hardcoded colors needed fixing. data.js script tag was already loaded before app.js. All JS files pass node --check validation."
+}
