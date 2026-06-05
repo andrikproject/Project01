@@ -7,7 +7,8 @@ const Storage = (() => {
   const KEYS = {
     BOOKMARKS: 'muslimpedia_bookmarks',
     LAST_READ: 'muslimpedia_lastread',
-    SETTINGS: 'muslimpedia_settings'
+    SETTINGS: 'muslimpedia_settings',
+    TASBIH: 'muslimpedia_tasbih'
   };
 
   const DEFAULT_SETTINGS = {
@@ -103,6 +104,25 @@ const Storage = (() => {
     }
   }
 
+  // ===== Tasbih =====
+
+  function getTasbih() {
+    try {
+      const data = localStorage.getItem(KEYS.TASBIH);
+      return data ? JSON.parse(data) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveTasbih(tasbihData) {
+    try {
+      localStorage.setItem(KEYS.TASBIH, JSON.stringify(tasbihData));
+    } catch (e) {
+      console.error('Error saving tasbih:', e);
+    }
+  }
+
   return {
     getBookmarks,
     saveBookmarks,
@@ -112,6 +132,8 @@ const Storage = (() => {
     getLastRead,
     setLastRead,
     getSettings,
-    saveSettings
+    saveSettings,
+    getTasbih,
+    saveTasbih
   };
 })();

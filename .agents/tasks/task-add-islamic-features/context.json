@@ -1,0 +1,35 @@
+{
+  "project_type": "Single-page PWA app with vanilla HTML/CSS/JavaScript",
+  "language": "JavaScript (ES6+, no transpilation)",
+  "build_system": "None - static files served directly, no bundler",
+  "test_framework": "None - no test infrastructure exists",
+  "build_command": "N/A - static site, validate by opening index.html",
+  "test_command": "N/A - no tests exist",
+  "verification_instructions": "Open index.html in browser; verify new pages render without JS errors; check navigation works between all pages",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - plain static files",
+  "environment_constraints": "OPEN_INTERNET - full network access available. No build tools needed. This is a client-side-only app.",
+  "contribution_requirements": "Keep same design language (Islamic green theme, card-based, mobile-first). Use Font Awesome 6.5 icons. Use Google Fonts Poppins + Amiri. Use localStorage for persistence.",
+  "key_patterns": {
+    "routing": "Hash-based routing in App.handleRoute() - switch on window.location.hash",
+    "page_structure": "Each page is a <section id='xxx-page' class='page'> in index.html",
+    "page_activation": "pages object maps name to DOM element; showPage() hides all, shows target",
+    "module_pattern": "IIFE modules (App, API, Storage) returning public methods",
+    "data_flow": "API module fetches from equran.id, returns parsed JSON data",
+    "styling": "CSS variables for theming, dark mode via [data-theme='dark'], mobile-first max-width 480px",
+    "nav": "Bottom nav with .nav-item buttons, data-page attribute for routing",
+    "error_handling": "renderError() with retry button pattern",
+    "loading": "renderSkeletons() for loading states",
+    "escaping": "escapeHtml() utility for XSS prevention"
+  },
+  "relevant_files": [
+    "index.html",
+    "js/app.js",
+    "js/api.js",
+    "js/storage.js",
+    "css/style.css",
+    "sw.js",
+    "manifest.json"
+  ],
+  "directory_structure": "Flat structure: index.html at root, css/style.css, js/app.js + api.js + storage.js, assets/ for icons, sw.js for service worker"
+}

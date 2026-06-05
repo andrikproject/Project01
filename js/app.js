@@ -13,6 +13,9 @@ const App = (() => {
   let searchGeneration = 0;
   let retryFnMap = {};
   let retryFnCounter = 0;
+  let tasbihCount = 0;
+  let tasbihTarget = 33;
+  let tasbihDzikir = 'Subhanallah';
 
   // ===== HTML Escaping Utility =====
 
@@ -32,7 +35,13 @@ const App = (() => {
     surahDetail: document.getElementById('surah-detail-page'),
     search: document.getElementById('search-page'),
     bookmark: document.getElementById('bookmark-page'),
-    settings: document.getElementById('settings-page')
+    settings: document.getElementById('settings-page'),
+    more: document.getElementById('more-page'),
+    doa: document.getElementById('doa-page'),
+    sholat: document.getElementById('sholat-page'),
+    tasbih: document.getElementById('tasbih-page'),
+    asmaulHusna: document.getElementById('asmaul-husna-page'),
+    hijriyah: document.getElementById('hijriyah-page')
   };
 
   const navItems = document.querySelectorAll('.nav-item');
@@ -73,6 +82,30 @@ const App = (() => {
         showPage('settings');
         loadSettings();
         break;
+      case '#more':
+        showPage('more');
+        loadMore();
+        break;
+      case '#doa':
+        showPage('doa');
+        loadDoa();
+        break;
+      case '#sholat':
+        showPage('sholat');
+        loadSholat();
+        break;
+      case '#tasbih':
+        showPage('tasbih');
+        loadTasbih();
+        break;
+      case '#asmaul-husna':
+        showPage('asmaulHusna');
+        loadAsmaulHusna();
+        break;
+      case '#hijriyah':
+        showPage('hijriyah');
+        loadHijriyah();
+        break;
       default:
         showPage('home');
         loadHome();
@@ -89,7 +122,9 @@ const App = (() => {
     }
 
     // Hide all pages
-    Object.values(pages).forEach(page => page.classList.remove('active'));
+    Object.values(pages).forEach(page => {
+      if (page) page.classList.remove('active');
+    });
 
     // Show target page
     if (pages[pageName]) {
@@ -102,7 +137,13 @@ const App = (() => {
       surahDetail: null,
       search: 'search',
       bookmark: 'bookmark',
-      settings: 'settings'
+      settings: null,
+      more: 'more',
+      doa: null,
+      sholat: null,
+      tasbih: null,
+      asmaulHusna: null,
+      hijriyah: null
     };
 
     navItems.forEach(item => {
@@ -201,7 +242,7 @@ const App = (() => {
 
       // Bismillah (not for At-Taubah / surah 9)
       if (nomor !== 9 && nomor !== 1) {
-        bismillah.innerHTML = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+        bismillah.innerHTML = '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0631\u0651\u064E\u062D\u0652\u0645\u064E\u0670\u0646\u0650 \u0627\u0644\u0631\u0651\u064E\u062D\u0650\u064A\u0645\u0650';
         bismillah.style.display = 'block';
       } else {
         bismillah.style.display = 'none';
@@ -506,11 +547,9 @@ const App = (() => {
 
       if (thisGeneration !== searchGeneration) return;
 
-      // Search through surahs one by one (limited to show quick results)
       const results = [];
       const maxResults = 20;
 
-      // Simple approach: search in surah names first, then load specific surahs if needed
       for (const surah of surahs) {
         if (results.length >= maxResults) break;
         if (thisGeneration !== searchGeneration) return;
@@ -532,7 +571,6 @@ const App = (() => {
               });
             }
           }
-          // Show results as they come in
           if (results.length > 0 && thisGeneration === searchGeneration) {
             renderAyahSearchResults(container, results);
           }
@@ -606,6 +644,280 @@ const App = (() => {
     });
   }
 
+  // ===== More Page =====
+
+  function loadMore() {
+    const grid = document.getElementById('more-grid');
+    const items = [
+      { icon: 'fa-hands-praying', label: 'Doa Harian', hash: '#doa' },
+      { icon: 'fa-clock', label: 'Jadwal Sholat', hash: '#sholat' },
+      { icon: 'fa-hand-holding-heart', label: 'Tasbih Digital', hash: '#tasbih' },
+      { icon: 'fa-star', label: 'Asmaul Husna', hash: '#asmaul-husna' },
+      { icon: 'fa-calendar', label: 'Kalender Hijriyah', hash: '#hijriyah' },
+      { icon: 'fa-compass', label: 'Arah Kiblat', hash: '#kiblat' },
+      { icon: 'fa-book-quran', label: 'Juz Amma', hash: '#juz-amma' },
+      { icon: 'fa-heart', label: 'Surah Favorit', hash: '#favorit' },
+      { icon: 'fa-calculator', label: 'Kalkulator Zakat', hash: '#zakat' },
+      { icon: 'fa-quote-right', label: 'Hadits', hash: '#hadits' },
+      { icon: 'fa-gear', label: 'Pengaturan', hash: '#settings' }
+    ];
+
+    grid.innerHTML = items.map(item => `
+      <div class="more-item" onclick="App.navigate('${item.hash}')">
+        <div class="more-item-icon"><i class="fas ${item.icon}"></i></div>
+        <span class="more-item-label">${escapeHtml(item.label)}</span>
+      </div>
+    `).join('');
+  }
+
+  // ===== Doa Harian =====
+
+  function loadDoa() {
+    const container = document.getElementById('doa-list');
+    container.innerHTML = DataDoa.map(doa => `
+      <div class="doa-card" onclick="App.toggleDoa(this)">
+        <div class="doa-card-header">
+          <span class="doa-card-title">${escapeHtml(doa.title)}</span>
+          <i class="fas fa-chevron-down doa-chevron"></i>
+        </div>
+        <div class="doa-card-body">
+          <p class="doa-arabic">${escapeHtml(doa.arabic)}</p>
+          <p class="doa-latin">${escapeHtml(doa.latin)}</p>
+          <p class="doa-translation">${escapeHtml(doa.translation)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleDoa(element) {
+    element.classList.toggle('expanded');
+  }
+
+  // ===== Jadwal Sholat =====
+
+  async function loadSholat() {
+    const timesContainer = document.getElementById('sholat-times');
+    const dateEl = document.getElementById('sholat-date');
+    const cityInput = document.getElementById('sholat-city');
+    const city = cityInput.value.trim() || 'Jakarta';
+
+    // Show current date
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateEl.textContent = now.toLocaleDateString('id-ID', options);
+
+    timesContainer.innerHTML = renderSkeletons(6, 'skeleton-card');
+
+    try {
+      const data = await API.getPrayerTimes(city, 'Indonesia');
+      const timings = data.timings;
+
+      const prayerList = [
+        { name: 'Subuh', key: 'Fajr', icon: 'fa-cloud-sun' },
+        { name: 'Syuruq', key: 'Sunrise', icon: 'fa-sun' },
+        { name: 'Dzuhur', key: 'Dhuhr', icon: 'fa-sun' },
+        { name: 'Ashar', key: 'Asr', icon: 'fa-cloud-sun' },
+        { name: 'Maghrib', key: 'Maghrib', icon: 'fa-moon' },
+        { name: 'Isya', key: 'Isha', icon: 'fa-moon' }
+      ];
+
+      // Determine next prayer
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+      let nextPrayerKey = null;
+
+      for (const prayer of prayerList) {
+        const timeStr = timings[prayer.key];
+        if (timeStr) {
+          const parts = timeStr.split(':');
+          const prayerMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+          if (prayerMinutes > currentTime) {
+            nextPrayerKey = prayer.key;
+            break;
+          }
+        }
+      }
+
+      timesContainer.innerHTML = prayerList.map(prayer => {
+        const time = timings[prayer.key] || '--:--';
+        const cleanTime = time.split(' ')[0];
+        const isNext = prayer.key === nextPrayerKey;
+        return `
+          <div class="sholat-time-item${isNext ? ' next' : ''}">
+            <div class="sholat-time-left">
+              <i class="fas ${prayer.icon}"></i>
+              <span class="sholat-time-name">${escapeHtml(prayer.name)}</span>
+            </div>
+            <span class="sholat-time-value">${escapeHtml(cleanTime)}</span>
+            ${isNext ? '<span class="sholat-next-badge">Berikutnya</span>' : ''}
+          </div>
+        `;
+      }).join('');
+    } catch (error) {
+      timesContainer.innerHTML = renderError('Gagal memuat jadwal sholat', () => loadSholat());
+    }
+  }
+
+  // ===== Tasbih Digital =====
+
+  function loadTasbih() {
+    const presetsContainer = document.getElementById('tasbih-presets');
+    const targetRow = document.getElementById('tasbih-target-row');
+    const countEl = document.getElementById('tasbih-count');
+
+    const dzikirList = [
+      'Subhanallah',
+      'Alhamdulillah',
+      'Allahu Akbar',
+      'Astaghfirullah',
+      'La ilaha illallah'
+    ];
+
+    const targets = [33, 99, 100, 0]; // 0 = unlimited
+
+    // Load saved data
+    const savedData = Storage.getTasbih();
+    if (savedData[tasbihDzikir] !== undefined) {
+      tasbihCount = savedData[tasbihDzikir];
+    } else {
+      tasbihCount = 0;
+    }
+    countEl.textContent = tasbihCount;
+
+    // Render presets
+    presetsContainer.innerHTML = dzikirList.map(d => `
+      <button class="tasbih-preset-btn${d === tasbihDzikir ? ' active' : ''}" onclick="App.setDzikir('${escapeHtml(d)}')">${escapeHtml(d)}</button>
+    `).join('');
+
+    // Render targets
+    targetRow.innerHTML = targets.map(t => {
+      const label = t === 0 ? '∞' : t;
+      const isActive = t === tasbihTarget;
+      return `<button class="tasbih-target-btn${isActive ? ' active' : ''}" onclick="App.setTasbihTarget(${t})">${label}</button>`;
+    }).join('');
+  }
+
+  function incrementTasbih() {
+    if (tasbihTarget > 0 && tasbihCount >= tasbihTarget) return;
+
+    tasbihCount++;
+    const countEl = document.getElementById('tasbih-count');
+    if (countEl) countEl.textContent = tasbihCount;
+
+    // Haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+
+    // Save
+    const savedData = Storage.getTasbih();
+    savedData[tasbihDzikir] = tasbihCount;
+    Storage.saveTasbih(savedData);
+
+    // Visual feedback on circle
+    const circle = document.getElementById('tasbih-circle');
+    if (circle) {
+      circle.classList.add('tapped');
+      setTimeout(() => circle.classList.remove('tapped'), 150);
+    }
+  }
+
+  function resetTasbih() {
+    tasbihCount = 0;
+    const countEl = document.getElementById('tasbih-count');
+    if (countEl) countEl.textContent = '0';
+
+    const savedData = Storage.getTasbih();
+    savedData[tasbihDzikir] = 0;
+    Storage.saveTasbih(savedData);
+  }
+
+  function setDzikir(name) {
+    tasbihDzikir = name;
+    const savedData = Storage.getTasbih();
+    tasbihCount = savedData[name] || 0;
+
+    const countEl = document.getElementById('tasbih-count');
+    if (countEl) countEl.textContent = tasbihCount;
+
+    // Update active preset button
+    document.querySelectorAll('.tasbih-preset-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.textContent === name) btn.classList.add('active');
+    });
+  }
+
+  function setTasbihTarget(target) {
+    tasbihTarget = target;
+    document.querySelectorAll('.tasbih-target-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    // Re-render targets to update active state
+    const targetRow = document.getElementById('tasbih-target-row');
+    const targets = [33, 99, 100, 0];
+    targetRow.innerHTML = targets.map(t => {
+      const label = t === 0 ? '\u221E' : t;
+      const isActive = t === target;
+      return `<button class="tasbih-target-btn${isActive ? ' active' : ''}" onclick="App.setTasbihTarget(${t})">${label}</button>`;
+    }).join('');
+  }
+
+  // ===== Asmaul Husna =====
+
+  function loadAsmaulHusna() {
+    const container = document.getElementById('asmaul-husna-list');
+    container.innerHTML = DataAsmaulHusna.map(name => `
+      <div class="asmaul-card">
+        <div class="asmaul-number">${name.number}</div>
+        <div class="asmaul-info">
+          <div class="asmaul-latin">${escapeHtml(name.latin)}</div>
+          <div class="asmaul-meaning">${escapeHtml(name.meaning)}</div>
+        </div>
+        <div class="asmaul-arabic">${escapeHtml(name.arabic)}</div>
+      </div>
+    `).join('');
+  }
+
+  // ===== Kalender Hijriyah =====
+
+  async function loadHijriyah() {
+    const container = document.getElementById('hijriyah-content');
+    container.innerHTML = renderSkeletons(1, 'skeleton-card');
+
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const dateStr = `${day}-${month}-${year}`;
+
+    const dayNames = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const dayName = dayNames[now.getDay()];
+
+    const gregorianStr = now.toLocaleDateString('id-ID', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    try {
+      const data = await API.getHijriDate(dateStr);
+      const hijri = data.hijri;
+
+      container.innerHTML = `
+        <div class="hijriyah-card">
+          <div class="hijriyah-icon"><i class="fas fa-moon"></i></div>
+          <div class="hijriyah-day">${escapeHtml(hijri.day)}</div>
+          <div class="hijriyah-month-ar">${escapeHtml(hijri.month.ar)}</div>
+          <div class="hijriyah-month">${escapeHtml(hijri.month.en)}</div>
+          <div class="hijriyah-year">${escapeHtml(hijri.year)} H</div>
+          <div class="hijriyah-divider"></div>
+          <div class="hijriyah-gregorian">
+            <i class="fas fa-calendar-day"></i> ${escapeHtml(gregorianStr)}
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      container.innerHTML = renderError('Gagal memuat kalender Hijriyah', () => loadHijriyah());
+    }
+  }
+
   // ===== Utility =====
 
   function renderSkeletons(count, className = 'skeleton-card') {
@@ -613,7 +925,6 @@ const App = (() => {
   }
 
   function renderError(message, retryFn) {
-    // Store retry function in a map with unique ID to avoid collisions
     retryFnCounter++;
     const retryId = retryFnCounter;
     retryFnMap[retryId] = retryFn;
@@ -713,6 +1024,27 @@ const App = (() => {
       settings.reciter = e.target.value;
       Storage.saveSettings(settings);
     });
+
+    // Sholat city search
+    document.getElementById('sholat-search-btn').addEventListener('click', () => {
+      loadSholat();
+    });
+
+    document.getElementById('sholat-city').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        loadSholat();
+      }
+    });
+
+    // Tasbih circle tap
+    document.getElementById('tasbih-circle').addEventListener('click', () => {
+      incrementTasbih();
+    });
+
+    // Tasbih reset
+    document.getElementById('tasbih-reset').addEventListener('click', () => {
+      resetTasbih();
+    });
   }
 
   // ===== Initialize =====
@@ -730,6 +1062,9 @@ const App = (() => {
     playAudio,
     toggleBookmark,
     deleteBookmark,
+    toggleDoa,
+    setDzikir,
+    setTasbihTarget,
     _retry: executeRetry
   };
 })();

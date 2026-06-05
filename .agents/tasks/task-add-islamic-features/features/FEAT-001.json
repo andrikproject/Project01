@@ -1,0 +1,41 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Restructure navigation to accommodate 10 new pages, and implement the first batch of 5 new features: Doa Harian, Jadwal Sholat, Tasbih Digital, Asmaul Husna, and Kalender Hijriyah. Update the bottom nav to use a 'Lainnya' (More) menu that opens a grid/list of additional features.",
+  "status": "in_progress",
+  "steps": [
+    "1. Update the bottom navigation in index.html: Keep Home, Cari, Bookmark as main nav items. Replace 'Setelan' with 'Lainnya' (More) which opens a menu/page showing grid of all additional features (Doa Harian, Jadwal Sholat, Tasbih, Asmaul Husna, Kalender Hijriyah, Arah Kiblat, Juz Amma, Surah Favorit, Kalkulator Zakat, Hadits, and Setelan). Use icons: fa-ellipsis or fa-grip for More, fa-hands-praying for Doa, fa-clock for Jadwal Sholat, fa-hand-holding-heart for Tasbih, fa-star for Asmaul Husna, fa-calendar for Kalender, fa-compass for Kiblat, fa-book for Juz Amma, fa-heart for Favorit, fa-calculator for Zakat, fa-quote-right for Hadits, fa-gear for Settings.",
+    "2. Add a new 'More' page section in index.html (<section id='more-page' class='page'>) with a grid layout showing cards/buttons for each feature. Style it with .more-grid using CSS grid (3 columns) with icon + label per item.",
+    "3. Update the router in js/app.js: Add new hash routes (#more, #doa, #sholat, #tasbih, #asmaul-husna, #hijriyah). Add corresponding page elements to the pages object. Update showPage() and navMap accordingly.",
+    "4. Add Doa Harian page (<section id='doa-page'>): Create a static JSON array of at least 20 common daily duas embedded in app.js (or a new js/data.js file). Each dua has: id, title (Indonesian), arabic text, transliteration (latin), translation (Indonesian). Render as expandable cards - show title, tap to expand showing arabic + transliteration + translation. Include duas like: before eating, after eating, before sleeping, waking up, entering mosque, leaving mosque, before traveling, entering bathroom, leaving bathroom, when it rains, for parents, before studying, after studying, when in difficulty, istikharah summary, etc.",
+    "5. Add Jadwal Sholat page (<section id='sholat-page'>): Use the Aladhan API (https://api.aladhan.com/v1/timingsByCity). On load, use navigator.geolocation to get user's position, then use a reverse geocode approach OR just ask user to input city/country. For simplicity, provide a city input with default 'Jakarta' and country 'Indonesia'. Show prayer times (Fajr/Subuh, Sunrise/Syuruq, Dhuhr/Dzuhur, Asr/Ashar, Maghrib, Isha/Isya) in a clean card layout. Show current date. Highlight the next upcoming prayer. Add the API call to js/api.js.",
+    "6. Add Tasbih Digital page (<section id='tasbih-page'>): Large circular counter display in the center. Tap anywhere on the counter area to increment. Show current count prominently (large number). Add preset dzikir options (Subhanallah, Alhamdulillah, Allahu Akbar, Astaghfirullah, La ilaha illallah, custom). Show target (default 33, options: 33, 99, 100, unlimited). Reset button. Save count per dzikir type in localStorage via Storage module. Use vibration API (navigator.vibrate) for haptic feedback on tap if available.",
+    "7. Add Asmaul Husna page (<section id='asmaul-husna-page'>): Embed array of 99 names of Allah with fields: number, arabic, latin, meaning_id (Indonesian meaning). Render as a scrollable card list similar to surah list. Each card shows number (in circle), arabic name, latin transliteration, and Indonesian meaning.",
+    "8. Add Kalender Hijriyah section (<section id='hijriyah-page'>): Use Aladhan API (https://api.aladhan.com/v1/gpiToH) to convert current Gregorian date to Hijri. Show: current Hijri date (day, month name in Arabic + Indonesian, year), current Gregorian date, and day of week. Style as a large centered card. Add API call to js/api.js.",
+    "9. Add CSS styles in css/style.css for all new pages: .more-grid (CSS grid 3 columns), .more-item (card with icon + text), .doa-card (expandable), .sholat-times-grid, .tasbih-container + .tasbih-counter + .tasbih-btn, .asmaul-husna-card, .hijriyah-card. Follow existing design patterns (var(--card-bg), var(--shadow), var(--radius), etc.).",
+    "10. Update the pages object in js/app.js to include all new page IDs. Update the Storage module in js/storage.js to add tasbih count persistence (key: 'muslimpedia_tasbih')."
+  ],
+  "acceptance_criteria": [
+    "Bottom nav shows 4 items: Home, Cari, Bookmark, Lainnya",
+    "Clicking 'Lainnya' navigates to #more page showing grid of all additional features",
+    "Doa Harian page renders at least 20 duas with Arabic, transliteration, and translation",
+    "Jadwal Sholat page fetches and displays prayer times from Aladhan API",
+    "Tasbih Digital counter increments on tap, persists count, has preset dzikir options",
+    "Asmaul Husna page shows all 99 names with Arabic, Latin, and meaning",
+    "Kalender Hijriyah shows current Hijri date from API",
+    "All pages navigate correctly via hash routing",
+    "Dark mode works on all new pages",
+    "No JavaScript errors in console"
+  ],
+  "verification": [
+    "Open index.html in a browser and verify no JS errors in console",
+    "Navigate through all new pages via the More menu",
+    "Verify Doa Harian shows expandable dua cards",
+    "Verify Jadwal Sholat loads prayer times (may need to input city)",
+    "Verify Tasbih counter increments and resets correctly",
+    "Verify Asmaul Husna shows 99 names",
+    "Verify Kalender Hijriyah displays Hijri date"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

@@ -84,8 +84,11 @@
 
     <!-- Settings Page -->
     <section id="settings-page" class="page">
-      <div class="simple-header">
-        <h2>Pengaturan</h2>
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Pengaturan</h2>
+        </div>
       </div>
       <div class="page-content">
         <div class="settings-group">
@@ -150,6 +153,103 @@
       </div>
     </section>
 
+    <!-- More Page -->
+    <section id="more-page" class="page">
+      <div class="simple-header">
+        <h2>Lainnya</h2>
+      </div>
+      <div class="page-content">
+        <div class="more-grid" id="more-grid"></div>
+      </div>
+    </section>
+
+    <!-- Doa Harian Page -->
+    <section id="doa-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Doa Harian</h2>
+          <p>Kumpulan doa sehari-hari</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="doa-list" class="doa-list"></div>
+      </div>
+    </section>
+
+    <!-- Jadwal Sholat Page -->
+    <section id="sholat-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Jadwal Sholat</h2>
+          <p id="sholat-date"></p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="sholat-city-input">
+          <div class="search-input-wrapper">
+            <i class="fas fa-location-dot search-icon"></i>
+            <input type="text" id="sholat-city" placeholder="Masukkan nama kota..." value="Jakarta" autocomplete="off">
+            <button id="sholat-search-btn" class="clear-search-btn"><i class="fas fa-magnifying-glass"></i></button>
+          </div>
+        </div>
+        <div id="sholat-times" class="sholat-times"></div>
+      </div>
+    </section>
+
+    <!-- Tasbih Digital Page -->
+    <section id="tasbih-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Tasbih Digital</h2>
+          <p>Dzikir & Tasbih</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="tasbih-container">
+          <div class="tasbih-presets" id="tasbih-presets"></div>
+          <div class="tasbih-target-row" id="tasbih-target-row"></div>
+          <div class="tasbih-circle" id="tasbih-circle">
+            <div class="tasbih-count" id="tasbih-count">0</div>
+            <div class="tasbih-label">ketuk untuk menghitung</div>
+          </div>
+          <div class="tasbih-actions">
+            <button class="tasbih-reset-btn" id="tasbih-reset"><i class="fas fa-rotate-right"></i> Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Asmaul Husna Page -->
+    <section id="asmaul-husna-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Asmaul Husna</h2>
+          <p>99 Nama Allah</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="asmaul-husna-list" class="asmaul-husna-list"></div>
+      </div>
+    </section>
+
+    <!-- Kalender Hijriyah Page -->
+    <section id="hijriyah-page" class="page">
+      <div class="detail-header">
+        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
+        <div class="detail-header-info">
+          <h2>Kalender Hijriyah</h2>
+          <p>Konversi Tanggal</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div id="hijriyah-content" class="hijriyah-content"></div>
+      </div>
+    </section>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <button class="nav-item active" data-page="home">
@@ -164,15 +264,16 @@
         <i class="fas fa-bookmark"></i>
         <span>Bookmark</span>
       </button>
-      <button class="nav-item" data-page="settings">
-        <i class="fas fa-gear"></i>
-        <span>Setelan</span>
+      <button class="nav-item" data-page="more">
+        <i class="fas fa-grip"></i>
+        <span>Lainnya</span>
       </button>
     </nav>
   </div>
 
   <script src="js/api.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {

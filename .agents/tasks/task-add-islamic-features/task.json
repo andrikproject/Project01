@@ -1,0 +1,7 @@
+{
+  "task_id": "task-add-islamic-features",
+  "task_description": "Add 10 new Islamic/Quran features to the Muslim Pedia app: Doa Harian, Jadwal Sholat, Arah Kiblat, Tasbih Digital, Asmaul Husna, Juz Amma, Surah Favorit, Kalkulator Zakat, Hadits, and Kalender Hijriyah. Restructure navigation with a More menu to accommodate all features.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003"],
+  "blocked_reason": null
+}
