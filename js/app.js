@@ -146,6 +146,18 @@ const App = (() => {
       currentPlayingAyah = null;
     }
 
+    // Clean up kiblat orientation listener when navigating away
+    if (pageName !== 'kiblat') {
+      if (kiblatOrientationHandler) {
+        window.removeEventListener('deviceorientation', kiblatOrientationHandler);
+        kiblatOrientationHandler = null;
+      }
+      if (kiblatWatchId !== null) {
+        navigator.geolocation.clearWatch(kiblatWatchId);
+        kiblatWatchId = null;
+      }
+    }
+
     // Hide all pages
     Object.values(pages).forEach(page => {
       if (page) page.classList.remove('active');
@@ -704,6 +716,10 @@ const App = (() => {
 
   function loadDoa() {
     const container = document.getElementById('doa-list');
+    if (typeof DataDoa === 'undefined') {
+      container.innerHTML = renderError('Gagal memuat data doa. Silakan muat ulang halaman.', function() { loadDoa(); });
+      return;
+    }
     container.innerHTML = DataDoa.map(doa => `
       <div class="doa-card" onclick="App.toggleDoa(this)">
         <div class="doa-card-header">
@@ -895,6 +911,10 @@ const App = (() => {
 
   function loadAsmaulHusna() {
     const container = document.getElementById('asmaul-husna-list');
+    if (typeof DataAsmaulHusna === 'undefined') {
+      container.innerHTML = renderError('Gagal memuat data Asmaul Husna. Silakan muat ulang halaman.', function() { loadAsmaulHusna(); });
+      return;
+    }
     container.innerHTML = DataAsmaulHusna.map(name => `
       <div class="asmaul-card">
         <div class="asmaul-number">${name.number}</div>
@@ -1001,8 +1021,8 @@ const App = (() => {
         compassEl.style.display = 'flex';
         degreeEl.textContent = Math.round(qiblaBearing) + '\u00B0';
 
-        // Check if Device Orientation is available
-        if (window.DeviceOrientationEvent) {
+        // Attach orientation listener helper
+        function attachOrientationListener() {
           kiblatOrientationHandler = function(event) {
             if (event.alpha !== null) {
               const alpha = event.alpha;
@@ -1015,6 +1035,31 @@ const App = (() => {
           };
           window.addEventListener('deviceorientation', kiblatOrientationHandler);
           infoEl.innerHTML = '<p class="kiblat-hint"><i class="fas fa-mobile-alt"></i> Putar perangkat Anda. Panah akan menunjukkan arah Kiblat.</p>';
+        }
+
+        // Check if Device Orientation is available
+        if (window.DeviceOrientationEvent) {
+          // iOS 13+ requires explicit permission request from a user gesture
+          if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            infoEl.innerHTML = '<button class="kiblat-permission-btn" id="kiblat-permission-btn"><i class="fas fa-compass"></i> Aktifkan Kompas</button>' +
+              '<p class="kiblat-hint">iOS memerlukan izin untuk mengakses sensor orientasi.</p>';
+            var permBtn = document.getElementById('kiblat-permission-btn');
+            if (permBtn) {
+              permBtn.addEventListener('click', function() {
+                DeviceOrientationEvent.requestPermission().then(function(state) {
+                  if (state === 'granted') {
+                    attachOrientationListener();
+                  } else {
+                    infoEl.innerHTML = '<p class="kiblat-hint kiblat-error"><i class="fas fa-exclamation-triangle"></i> Izin sensor ditolak. Aktifkan melalui pengaturan browser untuk menggunakan kompas.</p>';
+                  }
+                }).catch(function() {
+                  infoEl.innerHTML = '<p class="kiblat-hint kiblat-error"><i class="fas fa-exclamation-triangle"></i> Gagal meminta izin sensor orientasi.</p>';
+                });
+              });
+            }
+          } else {
+            attachOrientationListener();
+          }
         } else {
           // Desktop - show static arrow
           const arrowEl = document.getElementById('kiblat-arrow');
@@ -1126,6 +1171,10 @@ const App = (() => {
 
   function loadHadits() {
     const container = document.getElementById('hadits-list');
+    if (typeof DataHadits === 'undefined') {
+      container.innerHTML = renderError('Gagal memuat data hadits. Silakan muat ulang halaman.', function() { loadHadits(); });
+      return;
+    }
     container.innerHTML = DataHadits.map(function(hadits) {
       return '<div class="hadits-card" onclick="App.toggleHadits(this)">' +
         '<div class="hadits-card-header">' +

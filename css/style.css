@@ -1469,6 +1469,34 @@ body {
   color: var(--primary);
 }
 
+.kiblat-hint.kiblat-error {
+  color: #e74c3c;
+}
+
+.kiblat-hint.kiblat-error i {
+  color: #e74c3c;
+}
+
+.kiblat-permission-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.kiblat-permission-btn:active {
+  opacity: 0.8;
+}
+
 /* ===== Kalkulator Zakat ===== */
 .zakat-info {
   margin-bottom: 16px;
@@ -1557,6 +1585,18 @@ body {
   font-size: 12px;
   color: var(--text-secondary);
   margin-top: 8px;
+}
+
+.zakat-nisab-disclaimer {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.zakat-nisab-disclaimer i {
+  color: #e67e22;
+  margin-right: 4px;
 }
 
 .zakat-calculate-btn {
