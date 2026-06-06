@@ -1,0 +1,26 @@
+{
+  "project_type": "Vanilla HTML/CSS/JS Progressive Web App (PWA) - Mobile-first financial tracking app",
+  "language": "JavaScript (ES6+), HTML5, CSS3",
+  "build_system": "None - static files, no build step required",
+  "test_framework": "None - manual verification via browser",
+  "build_command": "N/A - static site, verify by opening index.html",
+  "test_command": "N/A - verify HTML validity and JS syntax via browser console",
+  "verification_instructions": "1. Open index.html in a browser. 2. Verify all pages load correctly via bottom navigation. 3. Test adding income/expense transactions. 4. Verify localStorage persistence by refreshing. 5. Test budget creation and tracking. 6. Verify charts render correctly. 7. Test export functionality. 8. Test search/filter. 9. Verify dark mode toggle. 10. Verify PWA manifest and service worker registration.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup required - open index.html in browser or serve via any static file server",
+  "environment_constraints": "OPEN_INTERNET - full access to CDNs for Font Awesome, Google Fonts, Chart.js",
+  "contribution_requirements": "Complete replacement of existing Muslim Pedia app with CatatinAja financial tracking app. All UI text in Bahasa Indonesia.",
+  "key_patterns": "The existing app uses: IIFE module pattern for JS (const Module = (() => { ... return { ... }; })(); ), hash-based routing with page sections in single HTML file, CSS variables for theming with dark mode support, localStorage for all data persistence, Font Awesome icons, Google Fonts (Poppins), mobile-first design with max-width 480px container, service worker for offline PWA support. The new app should follow identical architectural patterns.",
+  "relevant_files": [
+    "index.html - main HTML file with all page sections and bottom nav",
+    "css/style.css - all styles with CSS variables, dark mode, mobile-first",
+    "js/app.js - main controller with routing, page rendering, event handlers",
+    "js/storage.js - localStorage abstraction layer",
+    "js/data.js - static data/categories (will become transaction categories)",
+    "js/api.js - will be removed/replaced (no external API needed)",
+    "manifest.json - PWA manifest",
+    "sw.js - service worker for offline caching",
+    "assets/ - icons (favicon, PWA icons)"
+  ],
+  "directory_structure": "Flat structure: index.html at root, css/ for stylesheets, js/ for JavaScript modules, assets/ for icons/images. No build tools, no node_modules, no package.json."
+}

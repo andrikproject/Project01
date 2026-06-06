@@ -1,139 +1,159 @@
-/**
- * LocalStorage Service
- * Handles bookmarks, last read position, and settings
- */
+const StorageModule = (() => {
+    const KEYS = {
+        transactions: 'catatinaja_transactions',
+        budgets: 'catatinaja_budgets',
+        settings: 'catatinaja_settings'
+    };
 
-const Storage = (() => {
-  const KEYS = {
-    BOOKMARKS: 'muslimpedia_bookmarks',
-    LAST_READ: 'muslimpedia_lastread',
-    SETTINGS: 'muslimpedia_settings',
-    TASBIH: 'muslimpedia_tasbih'
-  };
+    const getItem = (key, defaultValue) => {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        } catch (e) {
+            console.error('Error reading localStorage:', e);
+            return defaultValue;
+        }
+    };
 
-  const DEFAULT_SETTINGS = {
-    fontSize: 28,
-    darkMode: false,
-    reciter: '05'
-  };
+    const setItem = (key, value) => {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+            return true;
+        } catch (e) {
+            console.error('Error writing localStorage:', e);
+            return false;
+        }
+    };
 
-  // ===== Bookmarks =====
+    // Transactions
+    const getTransactions = () => {
+        return getItem(KEYS.transactions, []);
+    };
 
-  function getBookmarks() {
-    try {
-      const data = localStorage.getItem(KEYS.BOOKMARKS);
-      return data ? JSON.parse(data) : [];
-    } catch {
-      return [];
-    }
-  }
+    const setTransactions = (transactions) => {
+        setItem(KEYS.transactions, transactions);
+    };
 
-  function saveBookmarks(bookmarks) {
-    try {
-      localStorage.setItem(KEYS.BOOKMARKS, JSON.stringify(bookmarks));
-    } catch (e) {
-      console.error('Error saving bookmarks:', e);
-    }
-  }
+    const addTransaction = (transaction) => {
+        const transactions = getTransactions();
+        const newTransaction = {
+            ...transaction,
+            id: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            createdAt: new Date().toISOString()
+        };
+        transactions.unshift(newTransaction);
+        setItem(KEYS.transactions, transactions);
+        return newTransaction;
+    };
 
-  function addBookmark(bookmark) {
-    const bookmarks = getBookmarks();
-    const exists = bookmarks.some(
-      b => b.surahNomor === bookmark.surahNomor && b.nomorAyat === bookmark.nomorAyat
-    );
-    if (!exists) {
-      bookmarks.push(bookmark);
-      saveBookmarks(bookmarks);
-    }
-  }
+    const updateTransaction = (id, updates) => {
+        const transactions = getTransactions();
+        const index = transactions.findIndex(t => t.id === id);
+        if (index === -1) return null;
+        transactions[index] = { ...transactions[index], ...updates };
+        setItem(KEYS.transactions, transactions);
+        return transactions[index];
+    };
 
-  function removeBookmark(surahNomor, nomorAyat) {
-    let bookmarks = getBookmarks();
-    bookmarks = bookmarks.filter(
-      b => !(b.surahNomor === surahNomor && b.nomorAyat === nomorAyat)
-    );
-    saveBookmarks(bookmarks);
-  }
+    const deleteTransaction = (id) => {
+        const transactions = getTransactions();
+        const filtered = transactions.filter(t => t.id !== id);
+        setItem(KEYS.transactions, filtered);
+        return filtered.length < transactions.length;
+    };
 
-  function isBookmarked(surahNomor, nomorAyat) {
-    const bookmarks = getBookmarks();
-    return bookmarks.some(
-      b => b.surahNomor === surahNomor && b.nomorAyat === nomorAyat
-    );
-  }
+    const getTransactionById = (id) => {
+        const transactions = getTransactions();
+        return transactions.find(t => t.id === id) || null;
+    };
 
-  // ===== Last Read =====
+    const getTransactionsByMonth = (year, month) => {
+        const transactions = getTransactions();
+        return transactions.filter(t => {
+            const date = new Date(t.date + 'T00:00:00');
+            return date.getFullYear() === year && date.getMonth() === month;
+        });
+    };
 
-  function getLastRead() {
-    try {
-      const data = localStorage.getItem(KEYS.LAST_READ);
-      return data ? JSON.parse(data) : null;
-    } catch {
-      return null;
-    }
-  }
+    const getTransactionsByDateRange = (fromDate, toDate) => {
+        const transactions = getTransactions();
+        return transactions.filter(t => {
+            return t.date >= fromDate && t.date <= toDate;
+        });
+    };
 
-  function setLastRead(data) {
-    try {
-      localStorage.setItem(KEYS.LAST_READ, JSON.stringify({
-        surahNomor: data.surahNomor,
-        surahName: data.surahName,
-        nomorAyat: data.nomorAyat
-      }));
-    } catch (e) {
-      console.error('Error saving last read:', e);
-    }
-  }
+    // Budgets
+    const getBudgets = () => {
+        return getItem(KEYS.budgets, []);
+    };
 
-  // ===== Settings =====
+    const setBudget = (budget) => {
+        const budgets = getBudgets();
+        const index = budgets.findIndex(b => b.category === budget.category && b.month === budget.month);
+        if (index >= 0) {
+            budgets[index] = budget;
+        } else {
+            budgets.push(budget);
+        }
+        setItem(KEYS.budgets, budgets);
+        return budget;
+    };
 
-  function getSettings() {
-    try {
-      const data = localStorage.getItem(KEYS.SETTINGS);
-      return data ? { ...DEFAULT_SETTINGS, ...JSON.parse(data) } : { ...DEFAULT_SETTINGS };
-    } catch {
-      return { ...DEFAULT_SETTINGS };
-    }
-  }
+    const setBudgets = (budgets) => {
+        setItem(KEYS.budgets, budgets);
+    };
 
-  function saveSettings(settings) {
-    try {
-      localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
-    } catch (e) {
-      console.error('Error saving settings:', e);
-    }
-  }
+    const getBudgetForCategory = (category, month) => {
+        const budgets = getBudgets();
+        return budgets.find(b => b.category === category && b.month === month) || null;
+    };
 
-  // ===== Tasbih =====
+    // Settings
+    const getSettings = () => {
+        return getItem(KEYS.settings, {
+            theme: 'light'
+        });
+    };
 
-  function getTasbih() {
-    try {
-      const data = localStorage.getItem(KEYS.TASBIH);
-      return data ? JSON.parse(data) : {};
-    } catch {
-      return {};
-    }
-  }
+    const saveSettings = (settings) => {
+        setItem(KEYS.settings, settings);
+        return settings;
+    };
 
-  function saveTasbih(tasbihData) {
-    try {
-      localStorage.setItem(KEYS.TASBIH, JSON.stringify(tasbihData));
-    } catch (e) {
-      console.error('Error saving tasbih:', e);
-    }
-  }
+    // Export all data
+    const exportAllData = () => {
+        return {
+            transactions: getTransactions(),
+            budgets: getBudgets(),
+            settings: getSettings(),
+            exportedAt: new Date().toISOString(),
+            appVersion: '1.1.0'
+        };
+    };
 
-  return {
-    getBookmarks,
-    saveBookmarks,
-    addBookmark,
-    removeBookmark,
-    isBookmarked,
-    getLastRead,
-    setLastRead,
-    getSettings,
-    saveSettings,
-    getTasbih,
-    saveTasbih
-  };
+    // Import all data
+    const importAllData = (data) => {
+        if (data.transactions) setItem(KEYS.transactions, data.transactions);
+        if (data.budgets) setItem(KEYS.budgets, data.budgets);
+        if (data.settings) setItem(KEYS.settings, data.settings);
+    };
+
+    return {
+        getTransactions,
+        setTransactions,
+        addTransaction,
+        updateTransaction,
+        deleteTransaction,
+        getTransactionById,
+        getTransactionsByMonth,
+        getTransactionsByDateRange,
+        getBudgets,
+        setBudget,
+        setBudgets,
+        getBudgetForCategory,
+        getSettings,
+        saveSettings,
+        exportAllData,
+        importAllData
+    };
 })();

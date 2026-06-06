@@ -1,0 +1,44 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Financial reports with charts/visualizations, budget management, data export, and search/filter functionality",
+  "status": "completed",
+  "steps": [
+    "Add Chart.js via CDN (https://cdn.jsdelivr.net/npm/chart.js) to index.html for data visualizations.",
+    "Implement the Laporan (Reports) page with three sub-sections toggled by tabs: Ringkasan (Summary), Kategori (By Category), Tren (Trend). Ringkasan shows: total income vs expense for selected period (month picker), net savings, comparison with previous month (percentage change). Kategori shows: donut/pie chart of expenses by category with legend showing amounts and percentages, and a similar one for income. Tren shows: line chart of daily spending for the current month, and a bar chart comparing monthly totals for the last 6 months.",
+    "Implement Budget Management on the Pengaturan (Settings) page or as a sub-page accessible from settings. Features: set monthly budget per expense category (e.g., Makanan Rp 2.000.000), view budget progress bars showing spent vs budget with percentage, color-code progress bars (green <75%, yellow 75-90%, red >90%), show total monthly budget vs total spent. Store budgets in localStorage via Storage.getBudgets()/setBudget().",
+    "Add a dedicated Budget page accessible from Settings (#budget) showing all category budgets as cards with progress bars, an 'Edit Budget' button per category that opens an inline edit form, and a summary card at top showing total budget vs total spent this month.",
+    "Implement Search and Filter on the Riwayat/Transactions page (#transactions). Add a search input at top that filters transactions by description text (real-time as user types). Add filter controls: filter by type (Semua/Pemasukan/Pengeluaran), filter by category (dropdown of all categories), filter by date range (dari-sampai date pickers). Show result count. Maintain filters across navigation (store in session state).",
+    "Implement Data Export functionality accessible from Settings page. Export options: Export as CSV (downloads a .csv file with columns: Tanggal, Tipe, Kategori, Deskripsi, Jumlah), Export as JSON (full data backup). Use Blob + URL.createObjectURL + temporary anchor element pattern for download. Add an Import JSON option that reads a previously exported JSON file and merges/replaces data with confirmation dialog.",
+    "Add a Statistik card on the Dashboard (#home) below the summary cards: show 'Pengeluaran Terbesar' (largest expense this month with category and amount), 'Rata-rata Pengeluaran Harian' (average daily expense), and 'Jumlah Transaksi' (transaction count this month). Also add a small spending trend sparkline or mini bar chart (last 7 days) using Chart.js.",
+    "Add monthly comparison feature in Reports: show income/expense comparison between current month and previous month with arrows indicating increase/decrease and percentage change, styled with green (positive) and red (negative) indicators."
+  ],
+  "acceptance_criteria": [
+    "Reports page displays three tabs (Ringkasan, Kategori, Tren) that switch content",
+    "Pie/donut chart correctly shows expense distribution by category with actual data from localStorage",
+    "Line chart shows daily spending trend for the current month",
+    "Bar chart shows last 6 months comparison (even if some months have no data)",
+    "Budget page allows setting a Rupiah budget amount per expense category",
+    "Budget progress bars show correct percentage of budget used with color coding",
+    "Search on transactions page filters results in real-time as user types",
+    "Type filter (Semua/Pemasukan/Pengeluaran) correctly filters transaction list",
+    "Category filter correctly shows only transactions of selected category",
+    "CSV export downloads a valid CSV file with all transactions",
+    "JSON export downloads complete data that can be re-imported",
+    "JSON import successfully restores data from a previously exported file",
+    "Dashboard statistics card shows correct calculated values",
+    "All charts are responsive and render correctly on mobile viewport (max 480px)",
+    "Charts update when new transactions are added"
+  ],
+  "verification": [
+    "Add several transactions across different categories and dates, then navigate to Reports and verify charts render with correct data",
+    "Set a budget for 'Makanan & Minuman' category, add expense transactions in that category, verify progress bar shows correct percentage",
+    "Type a search term on Transactions page and verify the list filters in real-time",
+    "Use category and type filters and verify correct filtering",
+    "Click Export CSV, open the downloaded file, verify it contains correct transaction data",
+    "Click Export JSON, then clear all data, then Import the JSON file and verify data is restored",
+    "Verify charts are visible and readable at mobile viewport width (375px-480px)"
+  ],
+  "blocked_reason": null,
+  "findings": "All features implemented successfully. Chart.js loaded via CDN. Reports page has 3 tabs with month picker. Budget page accessible from Settings via #budget route. Search/filter on transactions with real-time search, type/category/date filters. Export CSV/JSON and Import JSON from Settings. Dashboard statistics with mini bar chart for last 7 days. Monthly comparison in Reports with percentage change indicators. All JS syntax validated with node --check."
+}
