@@ -1,376 +1,239 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1B7D4E">
-  <meta name="description" content="Muslim Pedia - Al-Quran Online dengan Terjemahan Indonesia">
-  <title>Muslim Pedia</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/icon-192.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatatinAja - Catatan Keuangan Pribadi</title>
+    <meta name="description" content="Aplikasi catatan keuangan pribadi yang sederhana dan mudah digunakan">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icon-192.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Home Page -->
-    <section id="home-page" class="page active">
-      <div class="header">
-        <div class="header-pattern"></div>
-        <div class="header-content">
-          <h1 class="app-title"><i class="fas fa-book-quran"></i> Muslim Pedia</h1>
-          <p class="app-subtitle">Al-Quran & Ibadah Digital</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="last-read-container"></div>
-        <div class="section-title">
-          <h2>Daftar Surah</h2>
-          <span class="surah-count">114 Surah</span>
-        </div>
-        <div id="surah-list" class="surah-list"></div>
-      </div>
-    </section>
-
-    <!-- Surah Detail Page -->
-    <section id="surah-detail-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" id="back-btn"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2 id="detail-surah-name"></h2>
-          <p id="detail-surah-info"></p>
-        </div>
-        <div id="detail-surah-arabic" class="detail-arabic-name"></div>
-      </div>
-      <div class="page-content">
-        <div id="surah-bismillah" class="bismillah"></div>
-        <div id="ayah-list" class="ayah-list"></div>
-        <div class="surah-navigation" id="surah-navigation"></div>
-      </div>
-    </section>
-
-    <!-- Search Page -->
-    <section id="search-page" class="page">
-      <div class="search-header">
-        <h2>Pencarian</h2>
-        <div class="search-input-wrapper">
-          <i class="fas fa-magnifying-glass search-icon"></i>
-          <input type="text" id="search-input" placeholder="Cari surah atau ayat..." autocomplete="off">
-          <button id="clear-search" class="clear-search-btn" style="display:none;"><i class="fas fa-xmark"></i></button>
-        </div>
-        <div class="search-tabs">
-          <button class="search-tab active" data-tab="surah">Surah</button>
-          <button class="search-tab" data-tab="ayah">Ayat</button>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="search-results" class="search-results"></div>
-      </div>
-    </section>
-
-    <!-- Bookmark Page -->
-    <section id="bookmark-page" class="page">
-      <div class="simple-header">
-        <h2>Bookmark</h2>
-      </div>
-      <div class="page-content">
-        <div id="bookmark-list" class="bookmark-list"></div>
-      </div>
-    </section>
-
-    <!-- Settings Page -->
-    <section id="settings-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Pengaturan</h2>
-        </div>
-      </div>
-      <div class="page-content">
-        <div class="settings-group">
-          <div class="settings-item">
-            <div class="settings-label">
-              <i class="fas fa-text-height"></i>
-              <span>Ukuran Teks Arab</span>
+    <div class="app-container">
+        <!-- Dashboard Page -->
+        <section class="page" id="page-home">
+            <header class="page-header">
+                <h1>CatatinAja</h1>
+                <p class="header-subtitle" id="current-month-label"></p>
+            </header>
+            <div class="page-content">
+                <div class="summary-cards">
+                    <div class="summary-card card-saldo">
+                        <div class="summary-icon"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="summary-info">
+                            <span class="summary-label">Saldo</span>
+                            <span class="summary-amount" id="summary-saldo">Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="summary-card card-income">
+                        <div class="summary-icon"><i class="fa-solid fa-arrow-down"></i></div>
+                        <div class="summary-info">
+                            <span class="summary-label">Pemasukan</span>
+                            <span class="summary-amount income" id="summary-income">Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="summary-card card-expense">
+                        <div class="summary-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                        <div class="summary-info">
+                            <span class="summary-label">Pengeluaran</span>
+                            <span class="summary-amount expense" id="summary-expense">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-header">
+                    <h2>Transaksi Terakhir</h2>
+                    <a href="#transactions" class="see-all">Lihat Semua</a>
+                </div>
+                <div class="transaction-list" id="recent-transactions">
+                    <div class="empty-state" id="empty-recent">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>Belum ada transaksi</p>
+                        <a href="#add" class="btn-primary">Tambah Transaksi</a>
+                    </div>
+                </div>
             </div>
-            <div class="settings-control">
-              <span id="font-size-value">28px</span>
-              <input type="range" id="font-size-slider" min="18" max="40" value="28">
+        </section>
+
+        <!-- Add Transaction Page -->
+        <section class="page" id="page-add">
+            <header class="page-header">
+                <h1>Tambah Transaksi</h1>
+            </header>
+            <div class="page-content">
+                <form id="transaction-form" novalidate>
+                    <div class="type-toggle">
+                        <button type="button" class="type-btn active" data-type="expense">
+                            <i class="fa-solid fa-arrow-up"></i> Pengeluaran
+                        </button>
+                        <button type="button" class="type-btn" data-type="income">
+                            <i class="fa-solid fa-arrow-down"></i> Pemasukan
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-amount">Jumlah</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix">Rp</span>
+                            <input type="number" id="input-amount" placeholder="0" min="1" required>
+                        </div>
+                        <span class="error-message" id="error-amount"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <div class="category-grid" id="category-grid"></div>
+                        <span class="error-message" id="error-category"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-description">Deskripsi</label>
+                        <input type="text" id="input-description" placeholder="Catatan transaksi (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-date">Tanggal</label>
+                        <input type="date" id="input-date" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full" id="btn-submit">Simpan Transaksi</button>
+                </form>
             </div>
-          </div>
-          <div class="settings-item">
-            <div class="settings-label">
-              <i class="fas fa-moon"></i>
-              <span>Mode Gelap</span>
+        </section>
+
+        <!-- Edit Transaction Page -->
+        <section class="page" id="page-edit">
+            <header class="page-header">
+                <button class="btn-back" id="btn-back-edit"><i class="fa-solid fa-arrow-left"></i></button>
+                <h1>Edit Transaksi</h1>
+                <button class="btn-delete" id="btn-delete-transaction"><i class="fa-solid fa-trash"></i></button>
+            </header>
+            <div class="page-content">
+                <form id="edit-transaction-form" novalidate>
+                    <div class="type-toggle">
+                        <button type="button" class="type-btn active" data-type="expense">
+                            <i class="fa-solid fa-arrow-up"></i> Pengeluaran
+                        </button>
+                        <button type="button" class="type-btn" data-type="income">
+                            <i class="fa-solid fa-arrow-down"></i> Pemasukan
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-amount">Jumlah</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix">Rp</span>
+                            <input type="number" id="edit-amount" placeholder="0" min="1" required>
+                        </div>
+                        <span class="error-message" id="edit-error-amount"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <div class="category-grid" id="edit-category-grid"></div>
+                        <span class="error-message" id="edit-error-category"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description">Deskripsi</label>
+                        <input type="text" id="edit-description" placeholder="Catatan transaksi (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-date">Tanggal</label>
+                        <input type="date" id="edit-date" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Simpan Perubahan</button>
+                </form>
             </div>
-            <div class="settings-control">
-              <label class="toggle-switch">
-                <input type="checkbox" id="dark-mode-toggle">
-                <span class="toggle-slider"></span>
-              </label>
+        </section>
+
+        <!-- Transaction History Page -->
+        <section class="page" id="page-transactions">
+            <header class="page-header">
+                <h1>Riwayat Transaksi</h1>
+            </header>
+            <div class="page-content">
+                <div class="filter-bar">
+                    <select id="filter-month" class="filter-select"></select>
+                    <select id="filter-type" class="filter-select">
+                        <option value="all">Semua</option>
+                        <option value="income">Pemasukan</option>
+                        <option value="expense">Pengeluaran</option>
+                    </select>
+                </div>
+                <div class="transaction-list" id="all-transactions">
+                    <div class="empty-state" id="empty-transactions">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>Belum ada transaksi</p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="settings-item">
-            <div class="settings-label">
-              <i class="fas fa-headphones"></i>
-              <span>Qari</span>
+        </section>
+
+        <!-- Reports Page -->
+        <section class="page" id="page-reports">
+            <header class="page-header">
+                <h1>Laporan</h1>
+            </header>
+            <div class="page-content">
+                <div class="empty-state coming-soon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h2>Segera Hadir</h2>
+                    <p>Fitur laporan keuangan akan segera tersedia di pembaruan berikutnya.</p>
+                </div>
             </div>
-            <div class="settings-control full-width">
-              <select id="reciter-select">
-                <option value="01">Abdullah Al-Juhany</option>
-                <option value="02">Abdul Muhsin Al-Qasim</option>
-                <option value="03">Abdurrahman as-Sudais</option>
-                <option value="04">Ibrahim Al-Dossari</option>
-                <option value="05" selected>Misyari Rasyid Al-Afasi</option>
-                <option value="06">Yasser Al-Dosari</option>
-              </select>
+        </section>
+
+        <!-- Settings Page -->
+        <section class="page" id="page-settings">
+            <header class="page-header">
+                <h1>Pengaturan</h1>
+            </header>
+            <div class="page-content">
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-info">
+                            <i class="fa-solid fa-moon"></i>
+                            <span>Mode Gelap</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-dark-mode">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <div class="app-info-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3>CatatinAja</h3>
+                    <p>Versi 1.0.0</p>
+                    <p class="app-info-desc">Aplikasi catatan keuangan pribadi yang sederhana dan mudah digunakan.</p>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="settings-group">
-          <h3 class="settings-group-title">Tentang</h3>
-          <div class="settings-item">
-            <div class="settings-label">
-              <i class="fas fa-info-circle"></i>
-              <span>Muslim Pedia v2.0</span>
-            </div>
-          </div>
-          <div class="settings-item">
-            <div class="settings-label">
-              <i class="fas fa-database"></i>
-              <span>Data dari equran.id</span>
-            </div>
-          </div>
-        </div>
-        <div class="arabic-preview settings-group">
-          <h3 class="settings-group-title">Pratinjau Teks Arab</h3>
-          <p class="preview-arabic" id="preview-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- More Page -->
-    <section id="more-page" class="page">
-      <div class="simple-header">
-        <h2>Lainnya</h2>
-      </div>
-      <div class="page-content">
-        <div class="more-grid" id="more-grid"></div>
-      </div>
-    </section>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#home" class="nav-item active" data-page="home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#add" class="nav-item" data-page="add">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span>Transaksi</span>
+            </a>
+            <a href="#reports" class="nav-item" data-page="reports">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="#settings" class="nav-item" data-page="settings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Pengaturan</span>
+            </a>
+        </nav>
+    </div>
 
-    <!-- Doa Harian Page -->
-    <section id="doa-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Doa Harian</h2>
-          <p>Kumpulan doa sehari-hari</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="doa-list" class="doa-list"></div>
-      </div>
-    </section>
-
-    <!-- Jadwal Sholat Page -->
-    <section id="sholat-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Jadwal Sholat</h2>
-          <p id="sholat-date"></p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div class="sholat-city-input">
-          <div class="search-input-wrapper">
-            <i class="fas fa-location-dot search-icon"></i>
-            <input type="text" id="sholat-city" placeholder="Masukkan nama kota..." value="Jakarta" autocomplete="off">
-            <button id="sholat-search-btn" class="clear-search-btn"><i class="fas fa-magnifying-glass"></i></button>
-          </div>
-        </div>
-        <div id="sholat-times" class="sholat-times"></div>
-      </div>
-    </section>
-
-    <!-- Tasbih Digital Page -->
-    <section id="tasbih-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Tasbih Digital</h2>
-          <p>Dzikir & Tasbih</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div class="tasbih-container">
-          <div class="tasbih-presets" id="tasbih-presets"></div>
-          <div class="tasbih-target-row" id="tasbih-target-row"></div>
-          <div class="tasbih-circle" id="tasbih-circle">
-            <div class="tasbih-count" id="tasbih-count">0</div>
-            <div class="tasbih-label">ketuk untuk menghitung</div>
-          </div>
-          <div class="tasbih-actions">
-            <button class="tasbih-reset-btn" id="tasbih-reset"><i class="fas fa-rotate-right"></i> Reset</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Asmaul Husna Page -->
-    <section id="asmaul-husna-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Asmaul Husna</h2>
-          <p>99 Nama Allah</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="asmaul-husna-list" class="asmaul-husna-list"></div>
-      </div>
-    </section>
-
-    <!-- Kalender Hijriyah Page -->
-    <section id="hijriyah-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Kalender Hijriyah</h2>
-          <p>Konversi Tanggal</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="hijriyah-content" class="hijriyah-content"></div>
-      </div>
-    </section>
-
-    <!-- Arah Kiblat Page -->
-    <section id="kiblat-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Arah Kiblat</h2>
-          <p>Kompas arah Ka'bah</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="kiblat-content" class="kiblat-container"></div>
-      </div>
-    </section>
-
-    <!-- Juz Amma Page -->
-    <section id="juz-amma-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Juz Amma</h2>
-          <p>Juz 30 - Surah 78 sampai 114</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="juz-amma-list" class="surah-list"></div>
-      </div>
-    </section>
-
-    <!-- Surah Favorit Page -->
-    <section id="favorit-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Surah Favorit</h2>
-          <p>Surah-surah populer</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="favorit-list" class="surah-list"></div>
-      </div>
-    </section>
-
-    <!-- Kalkulator Zakat Page -->
-    <section id="zakat-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Kalkulator Zakat</h2>
-          <p>Hitung zakat mal</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div class="zakat-info">
-          <div class="zakat-info-card">
-            <i class="fas fa-info-circle"></i>
-            <p>Zakat Mal wajib dikeluarkan jika harta mencapai nisab (setara 85 gram emas) dan telah dimiliki selama 1 tahun (haul). Besarnya 2,5% dari total harta.</p>
-          </div>
-        </div>
-        <div class="zakat-form">
-          <div class="zakat-input-group">
-            <label for="zakat-amount">Total Harta (Rupiah)</label>
-            <div class="zakat-input-wrapper">
-              <span class="zakat-currency">Rp</span>
-              <input type="number" id="zakat-amount" class="zakat-input" placeholder="Masukkan jumlah harta">
-            </div>
-            <p class="zakat-nisab-info">Nisab: 85 gram emas (sekitar Rp 85.000.000)</p>
-            <p class="zakat-nisab-disclaimer"><i class="fas fa-exclamation-circle"></i> Harga emas bersifat fluktuatif. Silakan cek harga emas terkini untuk nisab yang akurat.</p>
-          </div>
-          <button class="zakat-calculate-btn" id="zakat-calculate-btn">
-            <i class="fas fa-calculator"></i> Hitung Zakat
-          </button>
-        </div>
-        <div id="zakat-result" class="zakat-result"></div>
-      </div>
-    </section>
-
-    <!-- Hadits Page -->
-    <section id="hadits-page" class="page">
-      <div class="detail-header">
-        <button class="back-btn" onclick="App.navigate('#more')"><i class="fas fa-arrow-left"></i></button>
-        <div class="detail-header-info">
-          <h2>Hadits</h2>
-          <p>Kumpulan hadits populer</p>
-        </div>
-      </div>
-      <div class="page-content">
-        <div id="hadits-list" class="hadits-list"></div>
-      </div>
-    </section>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-page="home">
-        <i class="fas fa-house"></i>
-        <span>Home</span>
-      </button>
-      <button class="nav-item" data-page="search">
-        <i class="fas fa-magnifying-glass"></i>
-        <span>Cari</span>
-      </button>
-      <button class="nav-item" data-page="bookmark">
-        <i class="fas fa-bookmark"></i>
-        <span>Bookmark</span>
-      </button>
-      <button class="nav-item" data-page="more">
-        <i class="fas fa-grip"></i>
-        <span>Lainnya</span>
-      </button>
-    </nav>
-  </div>
-
-  <script src="js/api.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-    }
-  </script>
+    <script src="js/data.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

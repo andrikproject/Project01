@@ -1,0 +1,44 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Complete replacement of Muslim Pedia with CatatinAja - Core app structure, routing, storage layer, and transaction management (add/edit/delete income & expenses with categories)",
+  "status": "in_progress",
+  "steps": [
+    "Replace index.html entirely with CatatinAja structure. Create pages: Dashboard (home), Tambah Transaksi (add transaction), Riwayat (history/transactions list), Laporan (reports), and Pengaturan (settings). Use bottom navigation with 4 tabs: Home, Transaksi, Laporan, Pengaturan. Keep same architectural pattern: single HTML file with section.page elements, hash-based routing.",
+    "Rewrite js/storage.js as a localStorage abstraction for financial data. Keys: catatinaja_transactions (array of transaction objects), catatinaja_budgets (budget per category per month), catatinaja_settings (theme, currency format, etc). Transaction object: {id, type:'income'|'expense', amount, category, description, date, createdAt}. Include CRUD operations: getTransactions(), addTransaction(), updateTransaction(), deleteTransaction(), getBudgets(), setBudget(), getSettings(), saveSettings().",
+    "Rewrite js/data.js to contain category definitions. Expense categories (with icons): Makanan & Minuman (fa-utensils), Transportasi (fa-car), Belanja (fa-shopping-bag), Tagihan & Utilitas (fa-file-invoice), Hiburan (fa-film), Kesehatan (fa-heart-pulse), Pendidikan (fa-graduation-cap), Investasi (fa-chart-line), Lainnya (fa-ellipsis). Income categories: Gaji (fa-briefcase), Freelance (fa-laptop), Bisnis (fa-store), Investasi (fa-chart-line), Hadiah (fa-gift), Lainnya (fa-ellipsis).",
+    "Rewrite js/app.js as the main controller. Implement: hash-based router (handleRoute for #home, #add, #transactions, #reports, #settings, #edit/:id), Dashboard page showing total saldo/pemasukan/pengeluaran for current month plus recent transactions list, Add Transaction page with form (type toggle income/expense, amount input with Rp prefix, category selector grid, description input, date picker defaulting to today), Transaction history page with month filter and list of all transactions grouped by date, Edit/delete transaction functionality.",
+    "Remove js/api.js file (no external API needed for this app - all data is local).",
+    "Rewrite css/style.css completely for CatatinAja. Use a modern financial app color scheme: primary blue (#4F46E5 indigo), success green (#10B981), danger red (#EF4444). Keep same patterns: CSS variables, dark mode support via [data-theme='dark'], mobile-first with max-width 480px container, cards with shadows, bottom nav fixed at bottom. Style all new components: transaction cards, amount displays (green for income, red for expense), category grid, form inputs, summary cards on dashboard.",
+    "Update manifest.json: name 'CatatinAja', short_name 'CatatinAja', description 'Catatan Keuangan Pribadi', theme_color '#4F46E5', background_color '#F8FAFC'.",
+    "Update sw.js: rename cache to 'catatinaja-v1', update STATIC_ASSETS list to match new file structure (remove api.js, keep others), remove API-specific caching logic (no external APIs).",
+    "Update assets/favicon.svg and assets/icon-192.svg and assets/icon-512.svg with a simple wallet/money icon design in indigo color suitable for a financial app.",
+    "Ensure the Add Transaction form validates: amount must be > 0, category must be selected. Show inline validation messages in Indonesian. After successful add, redirect to #home and show the new transaction in recent list."
+  ],
+  "acceptance_criteria": [
+    "Opening index.html shows CatatinAja dashboard with month summary (Saldo, Pemasukan, Pengeluaran all starting at Rp 0)",
+    "Bottom navigation has 4 tabs: Home, Transaksi, Laporan, Pengaturan - all navigate correctly via hash routing",
+    "User can add an income transaction with amount, category, description, and date - it persists in localStorage",
+    "User can add an expense transaction similarly",
+    "Dashboard updates to show correct saldo (income - expenses), total pemasukan, total pengeluaran for current month",
+    "Transaction history page shows all transactions grouped by date with amount colored green (income) or red (expense)",
+    "User can edit an existing transaction (navigates to edit form pre-filled with data)",
+    "User can delete a transaction with confirmation dialog",
+    "All category icons display correctly using Font Awesome",
+    "Dark mode toggle in settings works and persists",
+    "PWA manifest and service worker are correctly configured for CatatinAja",
+    "All UI text is in Bahasa Indonesia"
+  ],
+  "verification": [
+    "Open index.html in browser and verify CatatinAja loads with dashboard showing Rp 0 balances",
+    "Navigate between all pages using bottom nav - verify no JS errors in console",
+    "Add a sample income transaction (Gaji, Rp 5.000.000) and verify dashboard updates",
+    "Add a sample expense transaction (Makanan, Rp 50.000) and verify saldo calculates correctly",
+    "Refresh the page and verify transactions persist from localStorage",
+    "Edit a transaction and verify the change is reflected",
+    "Delete a transaction and verify it is removed",
+    "Toggle dark mode in settings and verify theme changes persist after refresh"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-catatinaja-finance-app",
+  "task_description": "Complete replacement of Muslim Pedia app with CatatinAja - a mobile-first personal finance tracking web app (PWA) built with vanilla HTML/CSS/JS. Features include: transaction recording (income/expense), categories with icons, dashboard with balance summary, financial reports with Chart.js visualizations, budget management per category, data export (CSV/JSON) and import, search and filter transactions, dark mode, and full offline PWA support. All UI in Bahasa Indonesia.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002"],
+  "blocked_reason": null
+}
