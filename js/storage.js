@@ -30,6 +30,10 @@ const StorageModule = (() => {
         return getItem(KEYS.transactions, []);
     };
 
+    const setTransactions = (transactions) => {
+        setItem(KEYS.transactions, transactions);
+    };
+
     const addTransaction = (transaction) => {
         const transactions = getTransactions();
         const newTransaction = {
@@ -71,6 +75,13 @@ const StorageModule = (() => {
         });
     };
 
+    const getTransactionsByDateRange = (fromDate, toDate) => {
+        const transactions = getTransactions();
+        return transactions.filter(t => {
+            return t.date >= fromDate && t.date <= toDate;
+        });
+    };
+
     // Budgets
     const getBudgets = () => {
         return getItem(KEYS.budgets, []);
@@ -88,6 +99,15 @@ const StorageModule = (() => {
         return budget;
     };
 
+    const setBudgets = (budgets) => {
+        setItem(KEYS.budgets, budgets);
+    };
+
+    const getBudgetForCategory = (category, month) => {
+        const budgets = getBudgets();
+        return budgets.find(b => b.category === category && b.month === month) || null;
+    };
+
     // Settings
     const getSettings = () => {
         return getItem(KEYS.settings, {
@@ -100,16 +120,40 @@ const StorageModule = (() => {
         return settings;
     };
 
+    // Export all data
+    const exportAllData = () => {
+        return {
+            transactions: getTransactions(),
+            budgets: getBudgets(),
+            settings: getSettings(),
+            exportedAt: new Date().toISOString(),
+            appVersion: '1.1.0'
+        };
+    };
+
+    // Import all data
+    const importAllData = (data) => {
+        if (data.transactions) setItem(KEYS.transactions, data.transactions);
+        if (data.budgets) setItem(KEYS.budgets, data.budgets);
+        if (data.settings) setItem(KEYS.settings, data.settings);
+    };
+
     return {
         getTransactions,
+        setTransactions,
         addTransaction,
         updateTransaction,
         deleteTransaction,
         getTransactionById,
         getTransactionsByMonth,
+        getTransactionsByDateRange,
         getBudgets,
         setBudget,
+        setBudgets,
+        getBudgetForCategory,
         getSettings,
-        saveSettings
+        saveSettings,
+        exportAllData,
+        importAllData
     };
 })();

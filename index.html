@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -47,6 +48,32 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Statistics Card -->
+                <div class="statistics-card" id="statistics-card">
+                    <div class="section-header">
+                        <h2>Statistik Bulan Ini</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Pengeluaran Terbesar</span>
+                            <span class="stat-value" id="stat-largest-expense">-</span>
+                            <span class="stat-sub" id="stat-largest-category"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Rata-rata Harian</span>
+                            <span class="stat-value" id="stat-daily-avg">Rp 0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Jumlah Transaksi</span>
+                            <span class="stat-value" id="stat-tx-count">0</span>
+                        </div>
+                    </div>
+                    <div class="mini-chart-container">
+                        <canvas id="mini-chart" height="60"></canvas>
+                    </div>
+                </div>
+
                 <div class="section-header">
                     <h2>Transaksi Terakhir</h2>
                     <a href="#transactions" class="see-all">Lihat Semua</a>
@@ -151,6 +178,10 @@
                 <h1>Riwayat Transaksi</h1>
             </header>
             <div class="page-content">
+                <div class="search-box">
+                    <i class="fa-solid fa-search search-icon"></i>
+                    <input type="text" id="search-transactions" placeholder="Cari transaksi..." class="search-input">
+                </div>
                 <div class="filter-bar">
                     <select id="filter-month" class="filter-select"></select>
                     <select id="filter-type" class="filter-select">
@@ -159,6 +190,16 @@
                         <option value="expense">Pengeluaran</option>
                     </select>
                 </div>
+                <div class="filter-bar">
+                    <select id="filter-category" class="filter-select">
+                        <option value="all">Semua Kategori</option>
+                    </select>
+                </div>
+                <div class="filter-bar">
+                    <input type="date" id="filter-date-from" class="filter-select" placeholder="Dari">
+                    <input type="date" id="filter-date-to" class="filter-select" placeholder="Sampai">
+                </div>
+                <div class="result-count" id="result-count"></div>
                 <div class="transaction-list" id="all-transactions">
                     <div class="empty-state" id="empty-transactions">
                         <i class="fa-solid fa-receipt"></i>
@@ -174,10 +215,44 @@
                 <h1>Laporan</h1>
             </header>
             <div class="page-content">
-                <div class="empty-state coming-soon">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <h2>Segera Hadir</h2>
-                    <p>Fitur laporan keuangan akan segera tersedia di pembaruan berikutnya.</p>
+                <div class="report-month-picker">
+                    <button id="report-month-prev" class="btn-month-nav"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="report-month-label">Juni 2025</span>
+                    <button id="report-month-next" class="btn-month-nav"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="report-tabs">
+                    <button class="report-tab active" data-tab="ringkasan">Ringkasan</button>
+                    <button class="report-tab" data-tab="kategori">Kategori</button>
+                    <button class="report-tab" data-tab="tren">Tren</button>
+                </div>
+                <div class="report-content" id="report-content">
+                    <!-- Dynamically rendered -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Page -->
+        <section class="page" id="page-budget">
+            <header class="page-header">
+                <button class="btn-back" id="btn-back-budget"><i class="fa-solid fa-arrow-left"></i></button>
+                <h1>Anggaran</h1>
+            </header>
+            <div class="page-content">
+                <div class="budget-summary-card" id="budget-summary">
+                    <div class="budget-summary-row">
+                        <span>Total Anggaran</span>
+                        <span id="budget-total-amount">Rp 0</span>
+                    </div>
+                    <div class="budget-summary-row">
+                        <span>Total Terpakai</span>
+                        <span id="budget-total-spent">Rp 0</span>
+                    </div>
+                    <div class="budget-progress-bar">
+                        <div class="budget-progress-fill" id="budget-total-progress"></div>
+                    </div>
+                </div>
+                <div class="budget-list" id="budget-list">
+                    <!-- Dynamically rendered -->
                 </div>
             </div>
         </section>
@@ -200,12 +275,46 @@
                         </label>
                     </div>
                 </div>
+                <div class="settings-list" style="margin-top: 16px;">
+                    <a href="#budget" class="settings-item settings-link">
+                        <div class="settings-info">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                            <span>Kelola Anggaran</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right" style="color: var(--text-muted);"></i>
+                    </a>
+                </div>
+                <div class="settings-section-title">Data</div>
+                <div class="settings-list">
+                    <div class="settings-item settings-link" id="btn-export-csv">
+                        <div class="settings-info">
+                            <i class="fa-solid fa-file-csv"></i>
+                            <span>Ekspor CSV</span>
+                        </div>
+                        <i class="fa-solid fa-download" style="color: var(--text-muted);"></i>
+                    </div>
+                    <div class="settings-item settings-link" id="btn-export-json">
+                        <div class="settings-info">
+                            <i class="fa-solid fa-file-code"></i>
+                            <span>Ekspor JSON</span>
+                        </div>
+                        <i class="fa-solid fa-download" style="color: var(--text-muted);"></i>
+                    </div>
+                    <div class="settings-item settings-link" id="btn-import-json">
+                        <div class="settings-info">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span>Impor JSON</span>
+                        </div>
+                        <i class="fa-solid fa-upload" style="color: var(--text-muted);"></i>
+                    </div>
+                </div>
+                <input type="file" id="import-file-input" accept=".json" style="display: none;">
                 <div class="app-info">
                     <div class="app-info-icon">
                         <i class="fa-solid fa-wallet"></i>
                     </div>
                     <h3>CatatinAja</h3>
-                    <p>Versi 1.0.0</p>
+                    <p>Versi 1.1.0</p>
                     <p class="app-info-desc">Aplikasi catatan keuangan pribadi yang sederhana dan mudah digunakan.</p>
                 </div>
             </div>

@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Financial reports with charts/visualizations, budget management, data export, and search/filter functionality",
-  "status": "pending",
+  "status": "in_progress",
   "steps": [
     "Add Chart.js via CDN (https://cdn.jsdelivr.net/npm/chart.js) to index.html for data visualizations.",
     "Implement the Laporan (Reports) page with three sub-sections toggled by tabs: Ringkasan (Summary), Kategori (By Category), Tren (Trend). Ringkasan shows: total income vs expense for selected period (month picker), net savings, comparison with previous month (percentage change). Kategori shows: donut/pie chart of expenses by category with legend showing amounts and percentages, and a similar one for income. Tren shows: line chart of daily spending for the current month, and a bar chart comparing monthly totals for the last 6 months.",
