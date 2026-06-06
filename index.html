@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Background decoration -->
+    <div class="bg-decoration" aria-hidden="true"></div>
     <div class="app-container">
         <!-- Dashboard Page -->
         <section class="page" id="page-home">
@@ -29,19 +31,19 @@
                     <div class="summary-card card-saldo">
                         <div class="summary-icon"><i class="fa-solid fa-wallet"></i></div>
                         <div class="summary-info">
-                            <span class="summary-label">Saldo</span>
+                            <span class="summary-label">Total Saldo</span>
                             <span class="summary-amount" id="summary-saldo">Rp 0</span>
                         </div>
                     </div>
                     <div class="summary-card card-income">
-                        <div class="summary-icon"><i class="fa-solid fa-arrow-down"></i></div>
+                        <div class="summary-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
                         <div class="summary-info">
                             <span class="summary-label">Pemasukan</span>
                             <span class="summary-amount income" id="summary-income">Rp 0</span>
                         </div>
                     </div>
                     <div class="summary-card card-expense">
-                        <div class="summary-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                        <div class="summary-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
                         <div class="summary-info">
                             <span class="summary-label">Pengeluaran</span>
                             <span class="summary-amount expense" id="summary-expense">Rp 0</span>
@@ -326,9 +328,9 @@
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
             </a>
-            <a href="#add" class="nav-item" data-page="add">
-                <i class="fa-solid fa-plus-circle"></i>
-                <span>Transaksi</span>
+            <a href="#add" class="nav-item nav-add" data-page="add">
+                <i class="fa-solid fa-plus"></i>
+                <span>Tambah</span>
             </a>
             <a href="#reports" class="nav-item" data-page="reports">
                 <i class="fa-solid fa-chart-pie"></i>
