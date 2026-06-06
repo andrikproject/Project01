@@ -17,6 +17,17 @@ const App = (() => {
     // Budget edit state
     let editingBudgetCategory = null;
 
+    // HTML escaping utility to prevent XSS
+    const escapeHtml = (str) => {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    };
+
     const init = () => {
         applyTheme();
         setupEventListeners();
@@ -277,13 +288,14 @@ const App = (() => {
         const labels = [];
         const data = [];
 
+        const transactions = StorageModule.getTransactions();
+
         for (let i = 6; i >= 0; i--) {
             const d = new Date(now);
             d.setDate(d.getDate() - i);
             const dateStr = d.toISOString().split('T')[0];
             labels.push(d.getDate().toString());
 
-            const transactions = StorageModule.getTransactions();
             const dayExpense = transactions
                 .filter(t => t.date === dateStr && t.type === 'expense')
                 .reduce((sum, t) => sum + t.amount, 0);
@@ -320,13 +332,13 @@ const App = (() => {
         const sign = t.type === 'income' ? '+' : '-';
 
         return `
-            <a href="#edit/${t.id}" class="transaction-item">
+            <a href="#edit/${escapeHtml(t.id)}" class="transaction-item">
                 <div class="transaction-icon ${amountClass}">
-                    <i class="fa-solid ${icon}"></i>
+                    <i class="fa-solid ${escapeHtml(icon)}"></i>
                 </div>
                 <div class="transaction-details">
-                    <span class="transaction-category">${t.category}</span>
-                    <span class="transaction-desc">${t.description || ''}</span>
+                    <span class="transaction-category">${escapeHtml(t.category)}</span>
+                    <span class="transaction-desc">${escapeHtml(t.description)}</span>
                 </div>
                 <div class="transaction-amount ${amountClass}">
                     ${sign} ${DataModule.formatCurrency(t.amount)}
@@ -359,9 +371,9 @@ const App = (() => {
 
         container.innerHTML = categories.map(c => `
             <button type="button" class="category-item ${c.name === selected ? 'selected' : ''}"
-                data-category="${c.name}" data-edit="${isEdit}">
-                <i class="fa-solid ${c.icon}"></i>
-                <span>${c.name}</span>
+                data-category="${escapeHtml(c.name)}" data-edit="${isEdit}">
+                <i class="fa-solid ${escapeHtml(c.icon)}"></i>
+                <span>${escapeHtml(c.name)}</span>
             </button>
         `).join('');
 
@@ -380,7 +392,7 @@ const App = (() => {
 
     const handleAddTransaction = (e) => {
         e.preventDefault();
-        const amount = parseInt(document.getElementById('input-amount').value);
+        const amount = Math.round(parseFloat(document.getElementById('input-amount').value));
         const description = document.getElementById('input-description').value.trim();
         const date = document.getElementById('input-date').value;
 
@@ -443,7 +455,7 @@ const App = (() => {
 
     const handleEditTransaction = (e) => {
         e.preventDefault();
-        const amount = parseInt(document.getElementById('edit-amount').value);
+        const amount = Math.round(parseFloat(document.getElementById('edit-amount').value));
         const description = document.getElementById('edit-description').value.trim();
         const date = document.getElementById('edit-date').value;
 
@@ -516,7 +528,7 @@ const App = (() => {
 
         let options = '<option value="all">Semua Kategori</option>';
         allCategories.forEach(c => {
-            options += `<option value="${c.name}">${c.name}</option>`;
+            options += `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`;
         });
 
         select.innerHTML = options;
@@ -770,7 +782,7 @@ const App = (() => {
             const percent = totalExpense > 0 ? ((entry[1] / totalExpense) * 100).toFixed(1) : 0;
             return `<div class="legend-item">
                 <div class="legend-color" style="background: ${chartColors[i % chartColors.length]}"></div>
-                <span class="legend-name">${entry[0]}</span>
+                <span class="legend-name">${escapeHtml(entry[0])}</span>
                 <span class="legend-amount">${DataModule.formatCurrency(entry[1])}</span>
                 <span class="legend-percent">${percent}%</span>
             </div>`;
@@ -782,7 +794,7 @@ const App = (() => {
             const percent = totalIncome > 0 ? ((entry[1] / totalIncome) * 100).toFixed(1) : 0;
             return `<div class="legend-item">
                 <div class="legend-color" style="background: ${chartColors[i % chartColors.length]}"></div>
-                <span class="legend-name">${entry[0]}</span>
+                <span class="legend-name">${escapeHtml(entry[0])}</span>
                 <span class="legend-amount">${DataModule.formatCurrency(entry[1])}</span>
                 <span class="legend-percent">${percent}%</span>
             </div>`;
@@ -1027,10 +1039,10 @@ const App = (() => {
                 <div class="budget-card">
                     <div class="budget-card-header">
                         <div class="budget-card-title">
-                            <i class="fa-solid ${cat.icon}"></i>
-                            ${cat.name}
+                            <i class="fa-solid ${escapeHtml(cat.icon)}"></i>
+                            ${escapeHtml(cat.name)}
                         </div>
-                        <button class="budget-card-btn" data-category="${cat.name}" onclick="App.toggleBudgetEdit('${cat.name}')">
+                        <button class="budget-card-btn" data-category="${escapeHtml(cat.name)}" onclick="App.toggleBudgetEdit('${escapeHtml(cat.name)}')">
                             ${isEditing ? 'Batal' : 'Edit'}
                         </button>
                     </div>
@@ -1044,8 +1056,8 @@ const App = (() => {
                     <div class="budget-card-percent" style="color: ${getPercentColor(percent)}">${percentDisplay}</div>
                     ${isEditing ? `
                         <div class="budget-edit-form">
-                            <input type="number" id="budget-input-${cat.id}" placeholder="Jumlah anggaran" value="${cat.budgetAmount || ''}">
-                            <button class="btn-save-budget" onclick="App.saveBudget('${cat.name}', '${cat.id}')">Simpan</button>
+                            <input type="number" id="budget-input-${escapeHtml(cat.id)}" placeholder="Jumlah anggaran" value="${cat.budgetAmount || ''}">
+                            <button class="btn-save-budget" onclick="App.saveBudget('${escapeHtml(cat.name)}', '${escapeHtml(cat.id)}')">Simpan</button>
                         </div>
                     ` : ''}
                 </div>
@@ -1076,7 +1088,7 @@ const App = (() => {
 
     const saveBudget = (categoryName, categoryId) => {
         const input = document.getElementById(`budget-input-${categoryId}`);
-        const amount = parseInt(input.value) || 0;
+        const amount = Math.round(parseFloat(input.value)) || 0;
 
         const now = new Date();
         const currentMonthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -1128,6 +1140,45 @@ const App = (() => {
                     alert('Format file tidak valid. Pastikan file yang dipilih adalah backup dari CatatinAja.');
                     return;
                 }
+
+                // Validate transactions array shape
+                if (data.transactions) {
+                    if (!Array.isArray(data.transactions)) {
+                        alert('Format file tidak valid. Field "transactions" harus berupa array.');
+                        return;
+                    }
+                    const requiredFields = ['id', 'type', 'amount', 'category', 'date'];
+                    for (let i = 0; i < data.transactions.length; i++) {
+                        const t = data.transactions[i];
+                        if (!t || typeof t !== 'object') {
+                            alert(`Format file tidak valid. Transaksi ke-${i + 1} bukan objek yang valid.`);
+                            return;
+                        }
+                        for (const field of requiredFields) {
+                            if (!(field in t)) {
+                                alert(`Format file tidak valid. Transaksi ke-${i + 1} tidak memiliki field "${field}".`);
+                                return;
+                            }
+                        }
+                        if (typeof t.amount !== 'number' || t.amount < 0) {
+                            alert(`Format file tidak valid. Transaksi ke-${i + 1} memiliki jumlah yang tidak valid.`);
+                            return;
+                        }
+                        if (t.type !== 'income' && t.type !== 'expense') {
+                            alert(`Format file tidak valid. Transaksi ke-${i + 1} memiliki tipe yang tidak valid.`);
+                            return;
+                        }
+                    }
+                }
+
+                // Validate budgets array shape
+                if (data.budgets) {
+                    if (!Array.isArray(data.budgets)) {
+                        alert('Format file tidak valid. Field "budgets" harus berupa array.');
+                        return;
+                    }
+                }
+
                 if (confirm('Impor data akan mengganti semua data saat ini. Lanjutkan?')) {
                     StorageModule.importAllData(data);
                     alert('Data berhasil diimpor!');
